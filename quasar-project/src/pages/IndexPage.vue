@@ -6,7 +6,7 @@
           <div class="q-card-primary q-card-container row no-wrap text-center bg-primary">
             <div class="col column">
               <div class="q-card-title">
-                <img src="/MSMC_Logo_Colour_White_Text.png" alt="Logo" class="logo">
+                <img src="/myclinic-logo-white.png" alt="Logo" class="logo">
               </div>
             </div>
             <div class="col-auto self-center q-card-title-extra"></div>
@@ -32,7 +32,7 @@
           </div>
         </div>
         <p class="text-center light-paragraph">
-          <small><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">click me</a></small>
+          <small>Developed by MainStreet Medical</small>
         </p>
       </div>
     </div>
@@ -74,7 +74,7 @@ export default {
 .q-card {
   width: 100%;
   max-width: 400px;
-  padding: 20px;
+  padding: 25px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #fff;
 }
@@ -92,11 +92,12 @@ export default {
 .logo {
   width: 100%;
   max-width: 200px; /* Adjust logo size */
-  margin-bottom: 20px; /* Space between logo and form */
+  margin-bottom: 0px; /* Space between logo and form */
+  align-items: center;
 }
 
 .q-card-main {
-  padding: 20px;
+  padding: 40px;
 }
 
 .input-container {
@@ -153,5 +154,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
 </style>
 
