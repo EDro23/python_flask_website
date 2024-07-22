@@ -6,7 +6,7 @@
           <div class="q-card-primary q-card-container row no-wrap text-center bg-primary">
             <div class="col column">
               <div class="q-card-title">
-                <img src="/myclinic-logo-white.png" alt="Logo" class="logo">
+                <img src="/msmc_medical_logo.png" alt="Logo" class="logo">
               </div>
             </div>
             <div class="col-auto self-center q-card-title-extra"></div>
@@ -53,6 +53,7 @@ export default {
       // Add your sign-in logic here
       console.log('Email:', this.email);
       console.log('Password:', this.password);
+      this.$router.push({ path: '/settings' });
     },
     togglePasswordVisibility() {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
@@ -86,7 +87,7 @@ export default {
   align-items: center; /* Center horizontally */
   background-color: #007bff; /* Blue background color */
   border-radius: 10px;
-  padding: 20px; /* Add padding for spacing */
+  padding: 5px; /* Add padding for spacing */
 }
 
 .logo {
@@ -102,7 +103,7 @@ export default {
 
 .input-container {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .input-container .fa {
@@ -154,6 +155,8 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
+
 
 </style>
 
