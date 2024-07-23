@@ -21,6 +21,10 @@
               <input :type="passwordFieldType" id="password" class="text-input" v-model="password" placeholder="Password">
               <i class="fa fa-eye eye-icon" @click="togglePasswordVisibility"></i>
             </div>
+            <!-- Error message -->
+            <div v-if="errorMessage" class="error-message">
+              {{ errorMessage }}
+            </div>
           </div>
           <div class="q-card-actions q-card-actions-vert column justify-start items-start">
             <button @click="signIn" class="q-btn row inline flex-center q-focusable q-hoverable relative-position fit q-btn-rectangle q-btn-standard bg-primary text-white">
@@ -40,20 +44,37 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
       email: '',
       password: '',
-      passwordFieldType: 'password' // Default to password hidden
+      passwordFieldType: 'password', // Default to password hidden
+      errorMessage: '' // Initialize errorMessage
     }
   },
   methods: {
-    signIn() {
-      // Add your sign-in logic here
-      console.log('Email:', this.email);
-      console.log('Password:', this.password);
-      this.$router.push({ path: '/settings' });
+    async signIn() {
+      try {
+        const response = await axios.post('http://localhost:3000/login', {
+          username: this.email, // The username (email) field
+          password: this.password // The password field
+        });
+
+        // Check if response contains a token
+        if (response.data && response.data.token) {
+          localStorage.setItem('token', response.data.token); // Save the token in local storage
+          this.$router.push({ path: '/settings' }); // Redirect to the settings page or wherever needed
+        } else {
+          this.errorMessage = 'Unexpected response format';
+        }
+      } catch (error) {
+        // Handle error response and show message to the user
+        console.error('Login failed:', error.response?.data || error.message);
+        this.errorMessage = error.response?.data || 'Login failed. Please check your username and password.';
+      }
     },
     togglePasswordVisibility() {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
@@ -156,7 +177,8 @@ export default {
   align-items: center;
 }
 
-
-
+.error-message {
+  color: red; /* Makes the error message text red */
+  margin-top: 10px; /* Adds some space above the error message */
+}
 </style>
-

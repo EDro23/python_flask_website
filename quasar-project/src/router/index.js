@@ -19,11 +19,12 @@ export default route(function (/* { store, ssrContext } */) {
   const Router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
     routes,
-
-    // Leave this as is and make changes in quasar.conf.js instead!
-    // quasar.conf.js -> build -> vueRouterMode
-    // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE)
+  })
+
+  // Add afterEach hook to dynamically set document title
+  Router.afterEach((to) => {
+    document.title = to.meta.title || 'Sign In'
   })
 
   return Router

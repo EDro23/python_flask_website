@@ -1,30 +1,27 @@
 <template>
     <q-page>
+      <title>About</title>
       <div class="layout-padding">
-        <h5>Application Info</h5>
+        <h5><b>Application Info</b></h5>
         <p>
-          Version: 2.0.9<br>
-          Support: <a href="https://www.myclinic.today" target="_blank">https://www.myclinic.today</a><br>
-          Email: <a href="mailto:info@myclinic.ca">info@myclinic.ca</a><br>
+          Version: 0.0.1<br>
+          Support: <a href="https://www.mainstreetclinic.ca/" target="_blank">https://www.mainstreetclinic.ca/</a><br>
+          Email: <a href="mailto:reception@mainstreetclinic.ca">reception@mainstreetclinic.ca</a><br>
         </p>
-        <h5>Developer Info</h5>
+        <div class="dev-info"><h5><b>Developer Info</b></h5>
         <p>
-          <a href="https://www.sevenview.ca" target="_blank">Sevenview Studios Inc.</a><br>
-          Email: <a href="mailto:dev@sevenview.ca">dev@sevenview.ca</a><br><br>
-          We are available to do custom mobile and web app development.<br>
-          Contact <a href="mailto:sales@sevenview.ca">sales@sevenview.ca</a>
+          <a href="https://www.mainstreetclinic.ca/" target="_blank">MainStreet Medical</a><br>
+          Email: <a href="mailto:reception@mainstreetclinic.ca">reception@mainstreetclinic.ca</a><br><br>
         </p>
-        <h5>License Info</h5>
-        <p>
-          © 2016—2024 Sevenview Studios Inc.
+        </div>
+        <h5><b>License Info</b></h5>
+        <div class="license-info"><p>
+          © 2016—2024 MainStreet Medical Clinic.
         </p>
-        <h5>Libraries & Resources</h5>
-        <p>
-          Built with
-          <a href="http://quasar-framework.org/" target="_blank">
-            <img src="statics/quasar-logo.svg" width="140px" class="vertical-middle">
-          </a>
-        </p>
+        </div>
+        <div class="img-container">
+          <img src="/msmc_medical_logo_b.png" height="100" width="500">
+        </div>
       </div>
     </q-page>
   </template>
@@ -37,19 +34,35 @@
   
   <style scoped>
   .layout-padding {
-    padding: 16px;
+    padding: 40px;
   }
   
   h5 {
-    margin-top: 16px;
+    margin-top: 10px;
   }
   
   p {
-    margin-bottom: 16px;
+    margin-bottom: 10px;
   }
   
   .vertical-middle {
     vertical-align: middle;
+  }
+
+  .img-container {
+    display: flex;
+    height: 10%;
+    width: 10%;
+  }
+
+  .dev-info {
+    margin-bottom: -10px;
+    margin-top: 10px;
+  }
+
+  .license-info {
+    display: flex;
+    margin-top: 1px;
   }
   </style>
   
