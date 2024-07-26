@@ -2,16 +2,7 @@ import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
 
-/*
- * If not building with SSR mode, you can
- * directly export the Router instantiation;
- *
- * The function below can be async too; either use
- * async/await or return a Promise which resolves
- * with the Router instance.
- */
-
-export default route(function (/* { store, ssrContext } */) {
+export default route(function () {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
@@ -21,6 +12,17 @@ export default route(function (/* { store, ssrContext } */) {
     routes,
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
+
+  // Navigation guard for authentication
+  Router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('token');
+    const isAuthenticated = !!token; // Replace with actual authentication check
+    if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+      next('/');
+    } else {
+      next();
+    }
+  });
 
   // Add afterEach hook to dynamically set document title
   Router.afterEach((to) => {

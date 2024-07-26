@@ -27,7 +27,7 @@
             </div>
           </div>
           <div class="q-card-actions q-card-actions-vert column justify-start items-start">
-            <button @click="signIn" class="q-btn row inline flex-center q-focusable q-hoverable relative-position fit q-btn-rectangle q-btn-standard bg-primary text-white">
+            <button @click="signIn" class="q-btn sign-in-btn row inline flex-center q-focusable q-hoverable relative-position fit q-btn-rectangle q-btn-standard bg-primary text-white">
               <div class="desktop-only q-focus-helper"></div>
               <span class="q-btn-inner row col flex-center">
                 Sign In
@@ -51,29 +51,28 @@ export default {
     return {
       email: '',
       password: '',
-      passwordFieldType: 'password', // Default to password hidden
-      errorMessage: '' // Initialize errorMessage
+      passwordFieldType: 'password',
+      errorMessage: ''
     }
   },
   methods: {
     async signIn() {
       try {
         const response = await axios.post('http://localhost:3000/login', {
-          username: this.email, // The username (email) field
-          password: this.password // The password field
+          username: this.email,
+          password: this.password
         });
 
-        // Check if response contains a token
         if (response.data && response.data.token) {
-          localStorage.setItem('token', response.data.token); // Save the token in local storage
-          this.$router.push({ path: '/settings' }); // Redirect to the settings page or wherever needed
+          localStorage.setItem('token', response.data.token);
+          this.$router.push('/settings'); // Redirect to the settings page
         } else {
           this.errorMessage = 'Unexpected response format';
         }
       } catch (error) {
-        // Handle error response and show message to the user
-        console.error('Login failed:', error.response?.data || error.message);
-        this.errorMessage = error.response?.data || 'Login failed. Please check your username and password.';
+        // Log detailed error message for debugging
+        console.error('Login failed:', error.response ? error.response.data : error.message);
+        this.errorMessage = error.response?.data.message || 'Login failed. Please check your email and password.';
       }
     },
     togglePasswordVisibility() {
@@ -157,7 +156,7 @@ export default {
   border-bottom: 2px solid #ddd;
   margin-top: 2px;
   outline: none;
-  transition: border-color 0.3s, border-bottom-width 0.3s;
+  transition: border-color 0.8s, border-bottom-width 0.8s;
 }
 
 .text-input:focus {
@@ -167,7 +166,7 @@ export default {
 }
 
 .q-card-actions {
-  margin-top: 5px;
+  margin-top: -15px;
 }
 
 .fixed-center {
@@ -180,5 +179,9 @@ export default {
 .error-message {
   color: red; /* Makes the error message text red */
   margin-top: 10px; /* Adds some space above the error message */
+}
+
+.sign-in-btn {
+  cursor:pointer;
 }
 </style>
