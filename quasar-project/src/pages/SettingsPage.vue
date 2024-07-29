@@ -32,22 +32,39 @@
         </div>
       </q-card-section>
     </q-card>
-
+    
     <!-- Buttons outside the card -->
     <div class="action-buttons">
       <q-btn class="q-mb-md" color="primary" label="Done" />
-      <q-btn color="negative" label="Sign Out" @click="signOut" />
+      <q-btn color="negative" label="Sign Out" @click="confirmSignOut" />
     </div>
+
+    <!-- Confirmation Dialog -->
+    <q-dialog v-model="dialogVisible">
+      <div class="confirmation-dialog">
+        <q-card>
+          <q-card-section class="row items-center">
+            <q-item-label>Are you sure you want to sign out?</q-item-label>
+          </q-card-section>
+
+          <q-card-section class="dialog-buttons">
+            <q-btn flat label="Cancel" color="black" @click="dialogVisible = false" />
+            <q-btn flat label="Sign Out" color="negative" @click="signOut" />
+          </q-card-section>
+        </q-card>
+      </div>
+    </q-dialog>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       selectedRoom: null,
       selectedOption: 'room-status', // Default to 'room-status'
       isMasterController: false,
+      dialogVisible: false,
       roomOptions: [
         { label: 'Room 1', value: 'room-1' },
         { label: 'Room 2', value: 'room-2' },
@@ -55,19 +72,23 @@ export default {
         { label: 'Room 4', value: 'room-4' },
         { label: 'Room 5', value: 'room-5' },
       ]
-    }
+    };
   },
   methods: {
     setOption(option) {
       this.selectedOption = option;
       this.isMasterController = option === 'master-controller';
     },
+    confirmSignOut() {
+      this.dialogVisible = true;
+    },
     signOut() {
       localStorage.removeItem('token'); // Clear the token from local storage
       this.$router.push('/'); // Redirect to the login page
+      this.dialogVisible = false; // Close the dialog
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -106,22 +127,32 @@ export default {
 
 .q-btn {
   color: black; /* Default text color */
-  background-color: lightgrey; /* Default button background color */
+  background-color: transparent; /* Remove background color */
+  border-radius: 0;
+  transition: color 0.3s, background-color 0.3s; /* Smooth color transitions */
 }
 
 .q-btn.light-grey {
-  background-color: lightgrey;
-  color: black; /* Ensure text color is black */
+  color: black; /* Text color for light grey buttons */
 }
 
 .q-btn.light-grey.btn-active {
-  background-color: green; /* Green color when active */
-  color: white; /* White text color when active */
+  background-color: green !important; /* Green background when active */
+  color: white !important; /* White text color when active */
 }
 
 .q-btn:hover {
-  background-color: grey;
-  color: black; /* Ensure text color is black on hover */
+  background-color: transparent; /* No background color on hover */
+  color: grey; /* Text color changes to grey on hover */
+}
+
+/* Ensure the button text color is correct when active */
+.button-group .q-btn {
+  color: black !important; /* Ensure text color is black for all buttons in the group */
+}
+
+.button-group .q-btn.btn-active {
+  color: white !important; /* White text color for active button */
 }
 
 .room-options-box {
@@ -152,4 +183,19 @@ export default {
 .action-buttons .q-mb-md {
   margin-bottom: 1rem;
 }
+
+/* Custom styles for the confirmation dialog */
+.confirmation-dialog {
+  width: 300px; /* Adjust the width of the dialog box */
+  max-width: 80%; /* Ensure it doesn't exceed 80% of the screen width */
+  margin: auto;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: center; /* Center the buttons */
+  gap: 1rem;
+}
+
 </style>
+

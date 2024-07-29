@@ -55,11 +55,29 @@
 
         <div class="row mt-4 q-pt-md">
           <q-btn label="Save" type="submit" color="primary" class="q-mr-md" />
-          <q-btn label="Delete" color="negative" @click="deleteStatus" />
+          <q-btn label="Delete" color="negative" @click="confirmDelete" />
           <q-btn label="Cancel" color="grey" @click="cancel" />
         </div>
       </form>
     </div>
+
+    <!-- Confirmation Dialog -->
+    <q-dialog v-model="deleteDialog">
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-icon name="warning" color="red" size="50px" class="q-mr-md" />
+          <div class="cf-diolog-edit">
+            <h5></h5>
+            <h7><b>Are you sure you want to delete this status?</b></h7>
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="grey" v-close-popup />
+          <q-btn flat label="Delete" color="negative" @click="deleteStatus" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -78,7 +96,8 @@ export default {
         '#FFDC00', '#FF851B', '#C2571A', '#FD0010', '#9A2617',
         '#85194B', '#CC44CC', '#F012BE', '#B10DC9', '#553DCB',
         '#BCA136', '#829356', '#AAAAAA', '#444444'
-      ]
+      ],
+      deleteDialog: false // Dialog visibility
     };
   },
   computed: {
@@ -103,6 +122,9 @@ export default {
       statuses = statuses.map(s => s.id === this.status.id ? this.status : s);
       localStorage.setItem('statuses', JSON.stringify(statuses));
       this.$router.push('/statuses');
+    },
+    confirmDelete() {
+      this.deleteDialog = true; // Show confirmation dialog
     },
     deleteStatus() {
       let statuses = JSON.parse(localStorage.getItem('statuses')) || [];
@@ -193,6 +215,15 @@ export default {
 
 .cancel-btn {
   margin-left: 8px; /* Add margin to the left of the Cancel button */
+}
+
+.cf-diolog-edit {
+  align-content: center;
+  margin-left: 50px;
+}
+
+.q-mr-md {
+  margin-left:20px;
 }
 
 </style>

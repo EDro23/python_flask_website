@@ -2,33 +2,34 @@
   <q-page padding>
     <div class="statuses-page">
       <q-btn fab icon="add" @click="goToNewStatus" class="add-btn" color="primary" />
-
-      <!-- Display list of statuses -->
-      <q-list>
-        <q-item
-          v-for="status in statuses"
-          :key="status.id"
-          class="status-item"
-          @click.stop="selectStatus(status)"
-        >
-          <q-item-section side>
-            <div class="mc-color-swatch round" :style="{ backgroundColor: status.color }"></div>
-          </q-item-section>
-          <q-item-section>
-            <div class="q-item-label">{{ status.name }}</div>
-            <div class="q-item-sublabel">{{ status.text }}</div>
-          </q-item-section>
-          <q-item-section side>
-            <q-btn
-              flat
-              round
-              icon="more_vert"
-              @click="showActions(status, $event)"
-              class="status-options-btn"
-            />
-          </q-item-section>
-        </q-item>
-      </q-list>
+      
+      <div class="statuses-container">
+        <q-list>
+          <q-item
+            v-for="status in statuses"
+            :key="status.id"
+            class="status-item"
+            @click.stop="selectStatus(status)"
+          >
+            <q-item-section side>
+              <div class="mc-color-swatch round" :style="{ backgroundColor: status.color }"></div>
+            </q-item-section>
+            <q-item-section>
+              <div class="q-item-label">{{ status.name }}</div>
+              <div class="q-item-sublabel">{{ status.text }}</div>
+            </q-item-section>
+            <q-item-section side>
+              <q-btn
+                flat
+                round
+                icon="more_vert"
+                @click="showActions(status, $event)"
+                class="status-options-btn"
+              />
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
     </div>
   </q-page>
 </template>
@@ -67,16 +68,34 @@ export default {
 </script>
 
 <style scoped>
+/* Ensure the page fills the viewport height and uses flexbox */
+.q-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full viewport height */
+  background-color: #f0f0f0; /* Light grey background color */
+}
+
 .statuses-page {
-  position: relative;
-  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Grow to fill available space */
   padding: 70px;
+  background-color: #f0f0f0; /* Light grey background color */
+}
+
+.statuses-container {
+  flex-grow: 1; /* Ensure it takes up the remaining space */
+  overflow-y: auto; /* Add scroll if content overflows */
+  background-color: #f0f0f0; /* Ensure the background color is consistent */
+  margin-top: 20px; /* Adjust if needed to fit content */
 }
 
 .add-btn {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  z-index: 1; /* Ensure the button is above other elements */
 }
 
 .status-item {
