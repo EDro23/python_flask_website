@@ -3,7 +3,9 @@
     <q-card class="my-card" flat bordered>
       <q-card-section>
         <div class="q-mb-md">
-          <q-item-label class="bold-text">Use this device to display room status or as master controller?</q-item-label>
+          <div class="top-text">
+            <q-item-label class="bold-text">Use this device to display room status or as master controller?</q-item-label>
+          </div>
           <div class="button-group">
             <q-btn
               :class="{'btn-active': selectedOption === 'master-controller'}"
@@ -33,13 +35,11 @@
       </q-card-section>
     </q-card>
     
-    <!-- Buttons outside the card -->
     <div class="action-buttons">
-      <q-btn class="q-mb-md" color="primary" label="Done" />
+      <q-btn class="q-mb-md" color="primary" label="Done" @click="navigateToRoom" />
       <q-btn color="negative" label="Sign Out" @click="confirmSignOut" />
     </div>
 
-    <!-- Confirmation Dialog -->
     <q-dialog v-model="dialogVisible">
       <div class="confirmation-dialog">
         <q-card>
@@ -62,7 +62,7 @@ export default {
   data() {
     return {
       selectedRoom: null,
-      selectedOption: 'room-status', // Default to 'room-status'
+      selectedOption: 'room-status',
       isMasterController: false,
       dialogVisible: false,
       roomOptions: [
@@ -79,13 +79,20 @@ export default {
       this.selectedOption = option;
       this.isMasterController = option === 'master-controller';
     },
+    navigateToRoom() {
+      if (this.selectedOption === 'room-status' && this.selectedRoom) {
+        this.$router.push({ path: `/roomstatus/${this.selectedRoom}` });
+      } else if (this.selectedOption === 'master-controller') {
+        this.$router.push({ path: '/master-controller' });
+      }
+    },
     confirmSignOut() {
       this.dialogVisible = true;
     },
     signOut() {
-      localStorage.removeItem('token'); // Clear the token from local storage
-      this.$router.push('/'); // Redirect to the login page
-      this.dialogVisible = false; // Close the dialog
+      localStorage.removeItem('token');
+      this.$router.push('/');
+      this.dialogVisible = false;
     }
   }
 };
@@ -121,47 +128,47 @@ export default {
 }
 
 .btn-active {
-  background-color: rgb(17, 199, 17) !important; /* Green color for active button */
+  background-color: rgb(17, 199, 17) !important;
   color: white !important;
 }
 
 .q-btn {
-  color: black; /* Default text color */
-  background-color: transparent; /* Remove background color */
+  color: black;
+  background-color: transparent;
   border-radius: 0;
-  transition: color 0.3s, background-color 0.3s; /* Smooth color transitions */
+  transition: color 0.3s, background-color 0.3s;
 }
 
 .q-btn.light-grey {
-  color: black; /* Text color for light grey buttons */
+  color: black;
 }
 
 .q-btn.light-grey.btn-active {
-  background-color: green !important; /* Green background when active */
-  color: white !important; /* White text color when active */
+  background-color: green !important;
+  color: white !important;
 }
 
 .q-btn:hover {
-  background-color: transparent; /* No background color on hover */
-  color: grey; /* Text color changes to grey on hover */
+  background-color: transparent;
+  color: grey;
 }
 
-/* Ensure the button text color is correct when active */
 .button-group .q-btn {
-  color: black !important; /* Ensure text color is black for all buttons in the group */
+  color: black !important;
 }
 
 .button-group .q-btn.btn-active {
-  color: white !important; /* White text color for active button */
+  color: white !important;
 }
 
 .room-options-box {
-  border: 1px solid #ccc;
-  padding: 2rem;
+  border: 1px solid #dddddd;
+  padding: 3rem;
   width: 100%;
-  max-width: 500px;
+  max-width: 720px;
   display: flex;
   flex-direction: column;
+  border-radius: 5px;
 }
 
 .room-options-label {
@@ -184,18 +191,24 @@ export default {
   margin-bottom: 1rem;
 }
 
-/* Custom styles for the confirmation dialog */
 .confirmation-dialog {
-  width: 300px; /* Adjust the width of the dialog box */
-  max-width: 80%; /* Ensure it doesn't exceed 80% of the screen width */
+  width: 300px;
+  max-width: 80%;
   margin: auto;
 }
 
 .dialog-buttons {
   display: flex;
-  justify-content: center; /* Center the buttons */
-  gap: 1rem;
+  justify-content: center;
+  gap: 10px;
 }
 
-</style>
+.dialog-buttons .q-btn {
+width: 100px;
+margin-top: 10px;
+}
 
+.top-text {
+  margin-bottom: 20px;
+}
+</style>

@@ -8,6 +8,9 @@ import ErrorNotFound from 'pages/ErrorNotFound.vue';
 import Statuses from 'pages/StatusesPage.vue';
 import NewStatusPage from 'pages/NewStatusPage.vue';
 import EditStatusPage from 'pages/EditStatusPage.vue';
+import ChangeStatusPage from 'src/pages/ChangeStatusPage.vue';
+import RoomStatusPage from 'src/pages/RoomStatusPage.vue';
+
 
 const routes = [
   // Unauthenticated routes
@@ -57,6 +60,16 @@ const routes = [
         path: 'statuses/edit/:id', // Changed to use path parameter
         component: EditStatusPage,
         meta: { title: 'Edit Status', requiresAuth: true }
+      },
+      {
+        path: '/change-status', // Changed to use path parameter
+        component: ChangeStatusPage,
+        meta: { title: 'Change Status', requiresAuth: true }
+      },
+      {
+        path: '/change-status/:roomNumber', // Changed to use path parameter
+        component: RoomStatusPage,
+        meta: { title: 'Room Status', requiresAuth: true }
       }
     ]
   },
