@@ -59,6 +59,7 @@ p {
 }
 
 .license-info {
-  margin-top: 20px; /* Space above the license info section */
+  margin-top: 20px;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; /* Space above the license info section */
 }
 </style>

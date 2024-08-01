@@ -17,9 +17,9 @@
       </div>
       <div
         class="q-card-main q-card-container mc-room-status"
-        :style="{ backgroundColor: room.statusColor }"
+        :style="{ backgroundColor: room.status.color }"
       >
-        <big class="text-bold">{{ room.status }}</big>
+        <big class="text-bold">{{ room.status.text }}</big>
       </div>
       <div class="q-card-actions q-card-actions-horiz row justify-start">
         <q-btn
@@ -39,22 +39,23 @@
 export default {
   data() {
     return {
-      rooms: [
-        { number: '01', primaryColor: 'rgb(164, 92, 40)', status: 'OH&S', statusColor: 'rgb(205, 115, 50)' },
-        { number: '02', primaryColor: 'rgb(31, 176, 72)', status: 'Your Room is Ready!', statusColor: 'rgb(42, 217, 91)' },
-        { number: '03', primaryColor: 'rgb(31, 176, 72)', status: 'Your Room is Ready!', statusColor: 'rgb(42, 217, 91)' },
-        { number: '04', primaryColor: 'rgb(31, 176, 72)', status: 'Your Room is Ready!', statusColor: 'rgb(42, 217, 91)' },
-        { number: '05', primaryColor: 'rgb(250, 35, 0)', status: 'OAMT', statusColor: 'rgb(255, 86, 58)' }
-      ],
+      rooms: [],
     };
   },
   methods: {
+    loadRooms() {
+      const storedRooms = JSON.parse(localStorage.getItem('rooms')) || [];
+      this.rooms = storedRooms;
+    },
     goToChangeStatus(room) {
       this.$router.push({
         path: '/change-status',
         query: { room: JSON.stringify(room) },
       });
     },
+  },
+  mounted() {
+    this.loadRooms();
   },
 };
 </script>
