@@ -1,8 +1,8 @@
 {
   "name": "quasar-project",
   "version": "0.0.1",
-  "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "description": "A Status App for MainStreet Medical Clinic",
+  "productName": "Status App",
   "author": "Ethan <Ethandrover@hotmail.com>",
   "private": true,
   "scripts": {
@@ -17,6 +17,7 @@
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "cloc": "^2.0.0-cloc",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",

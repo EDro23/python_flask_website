@@ -83,7 +83,7 @@ export default {
       if (this.selectedOption === 'room-status' && this.selectedRoom) {
         this.$router.push({ path: `/roomstatus/${this.selectedRoom}` });
       } else if (this.selectedOption === 'master-controller') {
-        this.$router.push({ path: '/master-controller' });
+        this.$router.push({ path: '/dashboard' });
       }
     },
     confirmSignOut() {
