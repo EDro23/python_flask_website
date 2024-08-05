@@ -82,6 +82,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -111,26 +113,34 @@ export default {
   methods: {
     async loadStatus() {
       const id = this.$route.params.id;
-      const statuses = JSON.parse(localStorage.getItem('statuses')) || [];
-      this.status = statuses.find(s => s.id == id) || this.status;
+      try {
+        const response = await axios.get(`/api/statuses/${id}`);
+        this.status = response.data;
+      } catch (error) {
+        console.error('Error loading status:', error);
+      }
     },
     selectColor(color) {
       this.status.color = color;
     },
-    saveStatus() {
-      let statuses = JSON.parse(localStorage.getItem('statuses')) || [];
-      statuses = statuses.map(s => s.id === this.status.id ? this.status : s);
-      localStorage.setItem('statuses', JSON.stringify(statuses));
-      this.$router.push('/statuses');
+    async saveStatus() {
+      try {
+        await axios.put(`/api/statuses/${this.status.id}`, this.status);
+        this.$router.push('/statuses');
+      } catch (error) {
+        console.error('Error saving status:', error);
+      }
     },
     confirmDelete() {
       this.deleteDialog = true; // Show confirmation dialog
     },
-    deleteStatus() {
-      let statuses = JSON.parse(localStorage.getItem('statuses')) || [];
-      statuses = statuses.filter(s => s.id !== this.status.id);
-      localStorage.setItem('statuses', JSON.stringify(statuses));
-      this.$router.push('/statuses');
+    async deleteStatus() {
+      try {
+        await axios.delete(`/api/statuses/${this.status.id}`);
+        this.$router.push('/statuses');
+      } catch (error) {
+        console.error('Error deleting status:', error);
+      }
     },
     cancel() {
       this.$router.push('/statuses');
@@ -225,5 +235,4 @@ export default {
 .q-mr-md {
   margin-left:20px;
 }
-
 </style>

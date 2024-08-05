@@ -6,7 +6,6 @@
       </div>
       <div>
         <form @submit.prevent="createStatus">
-          <!-- Your form inputs -->
           <q-input
             v-model="name"
             label="Name"
@@ -25,8 +24,7 @@
             dense
             class="q-mb-md custom-input"
           />
-          
-          <!-- Color options -->
+
           <div class="vc-compact q-mb-md">
             <ul class="vc-compact-colors">
               <li
@@ -68,12 +66,14 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
       name: '',
       text: '',
-      color: '#001F3F', // Initialize with the first color as dark blue
+      color: '#001F3F',
       colorOptions: [
         '#001F3F', '#0074D9', '#39CCCC', '#3D9970', '#2ECC40',
         '#FFDC00', '#FF851B', '#C2571A', '#FD0010', '#9A2617',
@@ -91,24 +91,29 @@ export default {
     selectColor(color) {
       this.color = color;
     },
-    createStatus() {
-      const newStatus = {
-        id: Date.now(), // Generate a unique ID
-        name: this.name,
-        text: this.text,
-        color: this.color
-      };
-      // Save the new status to local storage
-      const statuses = JSON.parse(localStorage.getItem('statuses')) || [];
-      statuses.push(newStatus);
-      localStorage.setItem('statuses', JSON.stringify(statuses));
-      this.$router.push('/statuses'); // Redirect to the statuses page
+    async createStatus() {
+      try {
+        const newStatus = {
+          name: this.name,
+          text: this.text,
+          color: this.color
+        };
+
+        // Send a POST request to the backend
+        await axios.post('http://localhost:3001/api/statuses/add', newStatus);
+
+        // Redirect to the statuses page after successful creation
+        this.$router.push('/statuses');
+      } catch (error) {
+        console.error('Error creating status:', error);
+        // Handle error appropriately
+      }
     },
     cancel() {
       this.name = '';
       this.text = '';
-      this.color = '#001F3F'; // Reset to dark blue on cancel
-      this.$router.push('/statuses'); // Redirect to /statuses page
+      this.color = '#001F3F';
+      this.$router.push('/statuses');
     }
   }
 };
@@ -174,10 +179,10 @@ export default {
 }
 
 .create-status-btn .q-btn__content {
-  color: white !important; /* White text for "Create Status" button */
+  color: white !important;
 }
 
 .cancel-btn .q-btn__content {
-  color: black !important; /* Black text for "Cancel" button */
+  color: black !important;
 }
 </style>

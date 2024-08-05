@@ -35,11 +35,13 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'StatusesPage',
   data() {
     return {
-      statuses: [], // Array to hold statuses
+      statuses: [],
       menuVisible: false,
       menuAnchor: null,
       currentStatus: null
@@ -49,13 +51,18 @@ export default {
     goToNewStatus() {
       this.$router.push('/statuses/newstatus');
     },
-    loadStatuses() {
-      this.statuses = JSON.parse(localStorage.getItem('statuses')) || [];
+    async loadStatuses() {
+      try {
+        const response = await axios.get('http://localhost:3001/api/statuses');
+        this.statuses = response.data;
+      } catch (error) {
+        console.error('Error loading statuses:', error);
+      }
     },
     showActions(status, event) {
       event.stopPropagation(); // Prevent click from bubbling up
       this.currentStatus = status;
-      this.$router.push({ path: `/statuses/edit/${status.id}` }); // Navigate to edit page
+      this.$router.push({ path: `/statuses/edit/${status._id}` }); // Navigate to edit page
     },
     selectStatus(status) {
       // Add logic to handle clicking on a status if needed
