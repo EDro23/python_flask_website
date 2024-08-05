@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const password = 'Oranges101'; // Replace with your actual password
+const password = 'ethan'; // Replace with your actual password
 const saltRounds = 10; // Number of salt rounds
 
 bcrypt.hash(password, saltRounds, (err, hash) => {
