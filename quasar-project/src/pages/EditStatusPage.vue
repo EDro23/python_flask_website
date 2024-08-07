@@ -22,7 +22,6 @@
           class="q-mb-md custom-input"
         />
         
-        <!-- Color options -->
         <div class="vc-compact q-mb-md">
           <ul class="vc-compact-colors">
             <li
@@ -31,9 +30,7 @@
               :style="{ background: colorOption }"
               class="vc-compact-color-item"
               @click="selectColor(colorOption)"
-            >
-              <!-- Ensure no dot element is present -->
-            </li>
+            ></li>
           </ul>
         </div>
 
@@ -42,14 +39,14 @@
           <div class="q-card-primary q-card-container row no-wrap text-white" :style="{ backgroundColor: nameColor }">
             <div class="col column">
               <div class="q-card-title">
-                <big class="text-bold">Room #</big>
+                <span class="text-bold">Room #</span>
               </div>
               <div class="q-card-subtitle"></div>
             </div>
             <div class="col-auto self-center q-card-title-extra"></div>
           </div>
           <div class="q-card-main q-card-container mc-room-status" :style="{ backgroundColor: status.color }">
-            <big class="text-bold">{{ status.text }}</big>
+            <span class="text-bold">{{ status.text }}</span>
           </div>
         </div>
 
@@ -61,17 +58,15 @@
       </form>
     </div>
 
-    <!-- Confirmation Dialog -->
     <q-dialog v-model="deleteDialog">
       <q-card>
         <q-card-section class="row items-center">
           <q-icon name="warning" color="red" size="50px" class="q-mr-md" />
           <div class="cf-diolog-edit">
             <h5></h5>
-            <h7><b>Are you sure you want to delete this status?</b></h7>
+            <h6><b>Are you sure you want to delete this status?</b></h6>
           </div>
         </q-card-section>
-
         <q-card-actions align="right">
           <q-btn flat label="Cancel" color="grey" v-close-popup />
           <q-btn flat label="Delete" color="negative" @click="deleteStatus" />
@@ -112,14 +107,15 @@ export default {
   },
   methods: {
     async loadStatus() {
-      const id = this.$route.params.id;
-      try {
-        const response = await axios.get(`/api/statuses/${id}`);
-        this.status = response.data;
-      } catch (error) {
-        console.error('Error loading status:', error);
-      }
-    },
+  const id = this.$route.params.id;
+  console.log('Status ID:', id); // Debugging line
+  try {
+    const response = await axios.get(`/statuses/${id}`);
+    this.status = response.data;
+  } catch (error) {
+    console.error('Error loading status:', error);
+  }
+},
     selectColor(color) {
       this.status.color = color;
     },
@@ -233,6 +229,6 @@ export default {
 }
 
 .q-mr-md {
-  margin-left:20px;
+  margin-left: 20px;
 }
 </style>
