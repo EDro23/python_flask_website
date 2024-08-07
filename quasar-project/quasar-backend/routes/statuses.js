@@ -3,23 +3,6 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Status = require('../models/Status');
 
-// Get a status by ID
-router.get('/:id', async (req, res) => {
-  try {
-    const id = req.params.id;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).send('Invalid ID format');
-    }
-    const status = await Status.findById(id);
-    if (!status) {
-      return res.status(404).send('Status not found');
-    }
-    res.json(status);
-  } catch (error) {
-    res.status(500).send('Server error');
-  }
-});
-
 // Add a new status
 router.post('/add', async (req, res) => {
   try {
@@ -42,29 +25,34 @@ router.get('/', async (req, res) => {
   }
 });
 
-
-// Update a status
-router.put('/edit/:id', async (req, res) => {
+// Get a status by ID
+router.get('/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-    const { name, text, color } = req.body;
-    const updatedStatus = await Status.findByIdAndUpdate(
-      id,
-      { name, text, color },
-      { new: true }
-    );
-    res.status(200).json(updatedStatus);
+    const status = await Status.findById(req.params.id);
+    if (!status) {
+      return res.status(404).json({ error: 'Status not found' });
+    }
+    res.json(status);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Delete a status by ID
+// Update a status
+router.put('/edit/:id', async (req, res) => {
+  try {
+    const updatedStatus = await Status.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedStatus);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete a status
 router.delete('/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-    await Status.findByIdAndDelete(id);
-    res.status(200).json({ message: 'Status deleted successfully' });
+    await Status.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Status deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

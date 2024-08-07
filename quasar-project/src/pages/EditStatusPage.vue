@@ -39,14 +39,14 @@
           <div class="q-card-primary q-card-container row no-wrap text-white" :style="{ backgroundColor: nameColor }">
             <div class="col column">
               <div class="q-card-title">
-                <span class="text-bold">Room #</span>
+                <big class="text-bold">Room #</big>
               </div>
               <div class="q-card-subtitle"></div>
             </div>
             <div class="col-auto self-center q-card-title-extra"></div>
           </div>
           <div class="q-card-main q-card-container mc-room-status" :style="{ backgroundColor: status.color }">
-            <span class="text-bold">{{ status.text }}</span>
+            <big class="text-bold">{{ status.text }}</big>
           </div>
         </div>
 
@@ -107,21 +107,22 @@ export default {
   },
   methods: {
     async loadStatus() {
-  const id = this.$route.params.id;
-  console.log('Status ID:', id); // Debugging line
-  try {
-    const response = await axios.get(`/statuses/${id}`);
-    this.status = response.data;
-  } catch (error) {
-    console.error('Error loading status:', error);
-  }
-},
+      const id = this.$route.params.id;
+      console.log('Status ID:', id); // Debugging line
+      try {
+        const response = await axios.get(`/statuses/${id}`);
+        this.status = response.data;
+        this.status.id = id; // Ensure the id is set correctly in the status object
+      } catch (error) {
+        console.error('Error loading status:', error);
+      }
+    },
     selectColor(color) {
       this.status.color = color;
     },
     async saveStatus() {
       try {
-        await axios.put(`/api/statuses/${this.status.id}`, this.status);
+        await axios.put(`/statuses/edit/${this.status.id}`, this.status);
         this.$router.push('/statuses');
       } catch (error) {
         console.error('Error saving status:', error);
@@ -132,7 +133,7 @@ export default {
     },
     async deleteStatus() {
       try {
-        await axios.delete(`/api/statuses/${this.status.id}`);
+        await axios.delete(`/statuses/${this.status.id}`);
         this.$router.push('/statuses');
       } catch (error) {
         console.error('Error deleting status:', error);
