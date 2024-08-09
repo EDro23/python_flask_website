@@ -58,8 +58,8 @@ export default {
   methods: {
     async signIn() {
       try {
-        const response = await axios.post('http://localhost:3000/login', {
-          username: this.email,
+        const response = await axios.post('http://localhost:3001/api/auth/login', {
+          email: this.email,
           password: this.password
         });
 
@@ -70,9 +70,23 @@ export default {
           this.errorMessage = 'Unexpected response format';
         }
       } catch (error) {
-        // Log detailed error message for debugging
-        console.error('Login failed:', error.response ? error.response.data : error.message);
-        this.errorMessage = error.response?.data.message || 'Login failed. Please check your email and password.';
+        if (error.response) {
+          // Server responded with a status other than 200 range
+          console.error('Login failed:', error.response.data);
+          if (error.response.status === 401) {
+            this.errorMessage = 'Invalid credentials';
+          } else {
+            this.errorMessage = error.response.data.message || 'Login failed. Please check your email and password.';
+          }
+        } else if (error.request) {
+          // Request was made but no response was received
+          console.error('Login failed: No response received');
+          this.errorMessage = 'Login failed. Please try again later.';
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('Login failed:', error.message);
+          this.errorMessage = 'Login failed. Please check your email and password.';
+        }
       }
     },
     togglePasswordVisibility() {
@@ -81,6 +95,7 @@ export default {
   }
 }
 </script>
+
 
 <style>
 #q-app {

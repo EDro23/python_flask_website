@@ -11,7 +11,6 @@ import EditStatusPage from 'pages/EditStatusPage.vue';
 import ChangeStatusPage from 'src/pages/ChangeStatusPage.vue';
 import RoomStatusPage from 'src/pages/RoomStatusPage.vue';
 
-
 const routes = [
   // Unauthenticated routes
   {
@@ -57,17 +56,17 @@ const routes = [
         meta: { title: 'New Status', requiresAuth: true }
       },
       {
-        path: 'statuses/edit/:id', // Changed to use path parameter
+        path: 'statuses/edit/:id',
         component: EditStatusPage,
         meta: { title: 'Edit Status', requiresAuth: true }
       },
       {
-        path: '/change-status', // Changed to use path parameter
+        path: 'change-status/:roomNumber',
         component: ChangeStatusPage,
         meta: { title: 'Change Status', requiresAuth: true }
       },
       {
-        path: '/change-status/:roomNumber', // Changed to use path parameter
+        path: 'room-status/:roomNumber',
         component: RoomStatusPage,
         meta: { title: 'Room Status', requiresAuth: true }
       }

@@ -5,6 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser'); // Make sure you have body-parser installed
 const cors = require('cors'); // Make sure you have cors installed
 const statuses = require('./routes/statuses'); // Import the statuses routes
+const auth = require('./routes/auth'); // Import the auth routes
 
 const app = express();
 
@@ -32,6 +33,8 @@ mongoose.connect(dbURI)
         console.log('Connected to MongoDB Successfully!');
         // Use the statuses routes
         app.use('/api/statuses', statuses);
+        // Use the auth routes
+        app.use('/api/auth', auth);
 
         // Start the server
         app.listen(port, () => {
