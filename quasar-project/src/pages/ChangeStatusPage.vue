@@ -26,77 +26,86 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'ChangeStatusPage',
   data() {
     return {
       room: null,
-      selectedStatus: '', // Use to bind the selected status name
-      statusOptions: [], // Options for q-select with status names
+      selectedStatus: '',
+      statusOptions: [],
     };
   },
   methods: {
     loadRoomData() {
       const roomData = this.$route.query.room;
       if (roomData) {
-        this.room = JSON.parse(roomData);
-        this.selectedStatus = this.room.status ? this.room.status.name : '';
-        console.log('Loaded room data:', this.room); // Debugging
+        try {
+          this.room = JSON.parse(roomData);
+          this.selectedStatus = this.room.status ? this.room.status.text : '';
+          console.log('Loaded room data:', this.room);
+        } catch (error) {
+          console.error('Error parsing room data:', error);
+        }
       } else {
-        console.log('No room data received'); // Debugging
+        console.log('No room data received');
       }
     },
-    loadStatuses() {
-      const storedStatuses = JSON.parse(localStorage.getItem('statuses')) || [];
-      this.statusOptions = storedStatuses.map(status => ({
-        id: status.id,
-        name: status.name,
-        color: status.color,
-        text: status.text,
-      }));
-      console.log('Loaded statuses:', this.statusOptions); // Debugging
+    async loadStatuses() {
+      try {
+        const response = await axios.get('http://localhost:3001/api/statuses');
+        this.statusOptions = response.data.map(status => ({
+          id: status._id,
+          name: status.name,
+          color: status.color,
+          text: status.text,
+        }));
+        console.log('Loaded statuses:', this.statusOptions);
+      } catch (error) {
+        console.error('Error loading statuses:', error);
+      }
     },
     cancel() {
       this.$router.push('/dashboard');
     },
-    saveStatus() {
-      console.log('Save button clicked'); // Debugging
-      console.log('Selected status:', this.selectedStatus); // Debugging
+    async saveStatus() {
+      console.log('Save button clicked');
+      console.log('Selected status:', this.selectedStatus);
 
       if (this.room && this.selectedStatus) {
-        // Convert selectedStatus to a plain object if needed
+        // Extract the plain object from the Proxy
         const selectedName = this.selectedStatus.name || this.selectedStatus;
 
         // Find the selected status by name
-        const selectedStatus = this.statusOptions.find(status => status.name === selectedName);
+        const selectedStatus = this.statusOptions.find(
+          status => status.name === selectedName
+        );
 
         if (selectedStatus) {
-          console.log('Selected status found:', selectedStatus); // Debugging
+          console.log('Selected status found:', selectedStatus);
 
           // Update the room's status and color
           this.room.status = {
             text: selectedStatus.text,
-            color: selectedStatus.color
+            color: selectedStatus.color,
           };
 
-          // Update localStorage
-          let storedRooms = JSON.parse(localStorage.getItem('rooms')) || [];
-          const index = storedRooms.findIndex(r => r.number === this.room.number);
-          if (index !== -1) {
-            storedRooms[index] = this.room;
-            localStorage.setItem('rooms', JSON.stringify(storedRooms));
-            console.log('Room updated successfully'); // Debugging
-          } else {
-            console.error('Room not found in localStorage.'); // Debugging
+          try {
+            await axios.put(`http://localhost:3001/api/rooms/${this.room.number}`, {
+              status: this.room.status,
+              primaryColor: this.room.primaryColor,
+            });
+            console.log('Room updated successfully');
+            this.$router.push('/dashboard');
+          } catch (error) {
+            console.error('Error updating room status:', error);
           }
-
-          // Redirect to dashboard
-          this.$router.push('/dashboard');
         } else {
-          console.error('Selected status not found.'); // Debugging
+          console.error('Selected status not found.');
         }
       } else {
-        console.error('Room or selected status is undefined.'); // Debugging
+        console.error('Room or selected status is undefined.');
       }
     },
   },

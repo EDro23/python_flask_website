@@ -61,7 +61,7 @@ const routes = [
         meta: { title: 'Edit Status', requiresAuth: true }
       },
       {
-        path: 'change-status/:roomNumber',
+        path: 'change-status',
         component: ChangeStatusPage,
         meta: { title: 'Change Status', requiresAuth: true }
       },

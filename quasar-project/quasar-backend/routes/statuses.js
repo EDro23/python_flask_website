@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Status = require('../models/Status');
+const io = require('../server'); // Import the WebSocket server
 
 // Add a new status
 router.post('/add', async (req, res) => {
@@ -42,6 +43,10 @@ router.get('/:id', async (req, res) => {
 router.put('/edit/:id', async (req, res) => {
   try {
     const updatedStatus = await Status.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+    // Emit the update to all connected clients
+    io.emit('statusUpdated', updatedStatus);
+
     res.json(updatedStatus);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -51,7 +56,11 @@ router.put('/edit/:id', async (req, res) => {
 // Delete a status
 router.delete('/:id', async (req, res) => {
   try {
-    await Status.findByIdAndDelete(req.params.id);
+    const deletedStatus = await Status.findByIdAndDelete(req.params.id);
+
+    // Emit the deletion to all connected clients
+    io.emit('statusDeleted', deletedStatus);
+
     res.json({ message: 'Status deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });

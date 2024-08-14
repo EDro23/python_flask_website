@@ -9,7 +9,7 @@
       <div class="q-card-primary q-card-container row no-wrap text-white">
         <div class="col column">
           <div class="q-card-title">
-            <big class="text-bold">{{ room.number }}</big>
+            <big class="text-bold rm-num">{{ room.number }}</big>
           </div>
           <div class="q-card-subtitle"></div>
         </div>
@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -43,9 +45,13 @@ export default {
     };
   },
   methods: {
-    loadRooms() {
-      const storedRooms = JSON.parse(localStorage.getItem('rooms')) || [];
-      this.rooms = storedRooms;
+    async loadRooms() {
+      try {
+        const response = await axios.get('http://localhost:3001/api/rooms');
+        this.rooms = response.data;
+      } catch (error) {
+        console.error('Error loading rooms:', error);
+      }
     },
     goToChangeStatus(room) {
       this.$router.push({
@@ -65,52 +71,57 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  justify-content: flex-start; /* Align cards to the left */
+  justify-content: flex-start;
   margin-left: 60px;
   margin-top: 100px;
-  padding: 1rem; /* Add padding to move cards from the edges */
+  padding: 1rem;
 }
 
 .q-card {
-  background-color: transparent; /* Remove background color */
-  border: 1px solid #ccc; /* Optional: Add border if needed */
-  min-height: 250px; /* Set a minimum height for the card */
+  background-color: transparent;
+  border: 1px solid #777777;
+  min-height: 250px;
   display: flex;
-  flex-direction: column; /* Ensure the card contents stack vertically */
-  justify-content: space-between; /* Space out the card contents */
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .q-card-primary,
 .q-card-actions {
-  background-color: transparent; /* Remove background color from card sections */
+  background-color: transparent;
 }
 
 .q-card-main {
-  height: 110px; /* Set a fixed height for the status box */
+  height: 110px;
   width: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent; /* Remove background color from card sections */
+  background-color: transparent;
 }
 
 .q-card-actions {
-  padding: 0; /* Optional: Remove padding */
+  padding: 0;
 }
 
 .status-btn {
-  width: 100%; /* Make button span the full width */
-  border: none; /* Optional: Border for button */
-  color: rgb(255, 255, 255); /* Button text color */
+  width: 100%;
+  border: none;
+  color: rgb(0, 0, 0);
   margin-top: 30px;
   margin-bottom: -10px;
 }
 
 .q-menu {
-  z-index: 1000; /* Ensure menu appears on top */
+  z-index: 1000;
 }
 
 .dashboard {
   color: white;
 }
+
+.rm-num {
+  color: black;
+}
+
 </style>
