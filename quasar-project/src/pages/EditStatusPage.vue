@@ -110,7 +110,7 @@ export default {
       const id = this.$route.params.id;
       console.log('Status ID:', id); // Debugging line
       try {
-        const response = await axios.get(`/statuses/${id}`);
+        const response = await axios.get(`/api/statuses/${id}`);
         this.status = response.data;
         this.status.id = id; // Ensure the id is set correctly in the status object
       } catch (error) {
@@ -122,7 +122,7 @@ export default {
     },
     async saveStatus() {
       try {
-        await axios.put(`/statuses/edit/${this.status.id}`, this.status);
+        await axios.put(`/api/statuses/edit/${this.status.id}`, this.status);
         this.$router.push('/statuses');
       } catch (error) {
         console.error('Error saving status:', error);
@@ -133,7 +133,7 @@ export default {
     },
     async deleteStatus() {
       try {
-        await axios.delete(`/statuses/${this.status.id}`);
+        await axios.delete(`/api/statuses/${this.status.id}`);
         this.$router.push('/statuses');
       } catch (error) {
         console.error('Error deleting status:', error);
@@ -145,6 +145,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .custom-input .q-field__control {
