@@ -21,7 +21,7 @@
           dense
           class="q-mb-md custom-input"
         />
-        
+
         <div class="vc-compact q-mb-md">
           <ul class="vc-compact-colors">
             <li
@@ -83,7 +83,7 @@ export default {
   data() {
     return {
       status: {
-        id: '',
+        _id: '', // Use _id instead of id
         name: '',
         text: '',
         color: '#001F3F' // Default color
@@ -108,11 +108,11 @@ export default {
   methods: {
     async loadStatus() {
       const id = this.$route.params.id;
-      console.log('Status ID:', id); // Debugging line
+      console.log('Attempting to load status with ID:', id); // Debugging line
       try {
-        const response = await axios.get(`/api/statuses/${id}`);
+        const response = await axios.get(`http://localhost:3001/api/statuses/${id}`);
+        console.log('Status loaded successfully:', response.data); // Debugging line
         this.status = response.data;
-        this.status.id = id; // Ensure the id is set correctly in the status object
       } catch (error) {
         console.error('Error loading status:', error);
       }
@@ -122,10 +122,14 @@ export default {
     },
     async saveStatus() {
       try {
-        await axios.put(`/api/statuses/edit/${this.status.id}`, this.status);
+        console.log('Saving status:', this.status);
+        await axios.put(`http://localhost:3001/api/statuses/${this.status._id}`, this.status);
+        console.log('Status saved successfully');
+
+        // Redirect to the statuses page after saving
         this.$router.push('/statuses');
       } catch (error) {
-        console.error('Error saving status:', error);
+        console.error('Error saving status:', error.response ? error.response.data : error.message);
       }
     },
     confirmDelete() {
@@ -133,10 +137,17 @@ export default {
     },
     async deleteStatus() {
       try {
-        await axios.delete(`/api/statuses/${this.status.id}`);
+        console.log('Deleting status:', this.status._id);
+        await axios.delete(`http://localhost:3001/api/statuses/${this.status._id}`);
+        console.log('Status deleted successfully');
+
+        // Close the dialog
+        this.deleteDialog = false;
+
+        // Redirect to the statuses page
         this.$router.push('/statuses');
       } catch (error) {
-        console.error('Error deleting status:', error);
+        console.error('Error deleting status:', error.response ? error.response.data : error.message);
       }
     },
     cancel() {
@@ -145,7 +156,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 .custom-input .q-field__control {

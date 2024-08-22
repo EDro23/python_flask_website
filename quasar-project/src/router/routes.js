@@ -9,7 +9,13 @@ import Statuses from 'pages/StatusesPage.vue';
 import NewStatusPage from 'pages/NewStatusPage.vue';
 import EditStatusPage from 'pages/EditStatusPage.vue';
 import ChangeStatusPage from 'src/pages/ChangeStatusPage.vue';
-import RoomStatusPage from 'src/pages/RoomStatusPage.vue';
+
+// Import your separate room status pages
+import RoomStatus1Page from 'src/pages/RoomStatus1Page.vue';
+import RoomStatus2Page from 'src/pages/RoomStatus2Page.vue';
+import RoomStatus3Page from 'src/pages/RoomStatus3Page.vue';
+import RoomStatus4Page from 'src/pages/RoomStatus4Page.vue';
+import RoomStatus5Page from 'src/pages/RoomStatus5Page.vue';
 
 const routes = [
   // Unauthenticated routes
@@ -65,10 +71,31 @@ const routes = [
         component: ChangeStatusPage,
         meta: { title: 'Change Status', requiresAuth: true }
       },
+      // Routes for separate room status pages
       {
-        path: 'room-status/:roomNumber',
-        component: RoomStatusPage,
-        meta: { title: 'Room Status', requiresAuth: true }
+        path: 'roomstatus/room-1',
+        component: RoomStatus1Page,
+        meta: { title: 'Room 1 Status', requiresAuth: true }
+      },
+      {
+        path: 'roomstatus/room-2',
+        component: RoomStatus2Page,
+        meta: { title: 'Room 2 Status', requiresAuth: true }
+      },
+      {
+        path: 'roomstatus/room-3',
+        component: RoomStatus3Page,
+        meta: { title: 'Room 3 Status', requiresAuth: true }
+      },
+      {
+        path: 'roomstatus/room-4',
+        component: RoomStatus4Page,
+        meta: { title: 'Room 4 Status', requiresAuth: true }
+      },
+      {
+        path: 'roomstatus/room-5',
+        component: RoomStatus5Page,
+        meta: { title: 'Room 5 Status', requiresAuth: true }
       }
     ]
   },

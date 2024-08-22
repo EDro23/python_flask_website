@@ -39,10 +39,14 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Update a status
-router.put('/edit/:id', async (req, res) => {
+// Update a status (Notice the path does not include 'edit')
+router.put('/:id', async (req, res) => {
   try {
     const updatedStatus = await Status.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+    if (!updatedStatus) {
+      return res.status(404).json({ error: 'Status not found' });
+    }
 
     // Emit the update to all connected clients
     io.emit('statusUpdated', updatedStatus);
@@ -57,6 +61,10 @@ router.put('/edit/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const deletedStatus = await Status.findByIdAndDelete(req.params.id);
+
+    if (!deletedStatus) {
+      return res.status(404).json({ error: 'Status not found' });
+    }
 
     // Emit the deletion to all connected clients
     io.emit('statusDeleted', deletedStatus);

@@ -21,13 +21,17 @@ export default {
   },
   async mounted() {
     const roomNumber = this.$route.params.number;
+    console.log('Fetching status for room number:', roomNumber); // Debugging line
+
     try {
       const response = await axios.get(`http://localhost:3001/api/rooms/${roomNumber}`);
+      console.log('Room status fetched:', response.data); // Debugging line
       this.roomStatus = response.data.status;
 
       // Set up WebSocket connection
       this.socket = io('http://localhost:3001');
       this.socket.on('statusUpdated', (updatedStatus) => {
+        console.log('Received status update via WebSocket:', updatedStatus); // Debugging line
         if (updatedStatus._id === response.data._id) {
           this.roomStatus = updatedStatus;
         }
