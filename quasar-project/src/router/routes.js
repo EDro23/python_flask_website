@@ -75,27 +75,27 @@ const routes = [
       {
         path: 'roomstatus/room-1',
         component: RoomStatus1Page,
-        meta: { title: 'Room 1 Status', requiresAuth: true }
+        meta: { title: 'Room 1', requiresAuth: true }
       },
       {
         path: 'roomstatus/room-2',
         component: RoomStatus2Page,
-        meta: { title: 'Room 2 Status', requiresAuth: true }
+        meta: { title: 'Room 2', requiresAuth: true }
       },
       {
         path: 'roomstatus/room-3',
         component: RoomStatus3Page,
-        meta: { title: 'Room 3 Status', requiresAuth: true }
+        meta: { title: 'Room 3', requiresAuth: true }
       },
       {
         path: 'roomstatus/room-4',
         component: RoomStatus4Page,
-        meta: { title: 'Room 4 Status', requiresAuth: true }
+        meta: { title: 'Room 4', requiresAuth: true }
       },
       {
         path: 'roomstatus/room-5',
         component: RoomStatus5Page,
-        meta: { title: 'Room 5 Status', requiresAuth: true }
+        meta: { title: 'Room 5', requiresAuth: true }
       }
     ]
   },
