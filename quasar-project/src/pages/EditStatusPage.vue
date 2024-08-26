@@ -39,14 +39,14 @@
           <div class="q-card-primary q-card-container row no-wrap text-white" :style="{ backgroundColor: nameColor }">
             <div class="col column">
               <div class="q-card-title">
-                <big class="text-bold">Room #</big>
+                <div class="text-bold"><big>Room #</big></div>
               </div>
               <div class="q-card-subtitle"></div>
             </div>
             <div class="col-auto self-center q-card-title-extra"></div>
           </div>
           <div class="q-card-main q-card-container mc-room-status" :style="{ backgroundColor: status.color }">
-            <big class="text-bold">{{ status.text }}</big>
+            <div class="text-bold"><big>{{ status.text }}</big></div>
           </div>
         </div>
 

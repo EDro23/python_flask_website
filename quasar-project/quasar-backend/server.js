@@ -1,3 +1,4 @@
+// server.js
 require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
@@ -5,7 +6,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const statuses = require('./routes/statuses');
 const auth = require('./routes/auth');
-const rooms = require('./routes/rooms'); // Import the rooms route
+const rooms = require('./routes/rooms');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 
@@ -25,9 +26,6 @@ const frontendOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:9000';
 app.use(cors({ origin: frontendOrigin }));
 app.use(bodyParser.json());
 
-// Check if dbURI is loaded correctly
-console.log('MONGODB_URI:', dbURI);
-
 if (!dbURI) {
   console.error('MONGODB_URI is not defined in .env file');
   process.exit(1);
@@ -38,9 +36,9 @@ mongoose
   .connect(dbURI)
   .then(() => {
     console.log('Connected to MongoDB Successfully!');
-    app.use('/api/statuses', statuses);
+    app.use('/api/statuses', statuses(io));  // Pass io to statuses route
     app.use('/api/auth', auth);
-    app.use('/api/rooms', rooms); // Use the rooms route
+    app.use('/api/rooms', rooms);
 
     // Start the server
     httpServer.listen(port, () => {

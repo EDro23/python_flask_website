@@ -87,8 +87,10 @@ export default {
   display: flex;
   flex-direction: column;
   flex-grow: 1; /* Grow to fill available space */
-  padding: 70px;
+  padding: 0 20px 20px; /* Add horizontal and bottom padding */
+  padding-top: 70px; /* Separate top padding to accommodate header or fixed elements */
   background-color: #f0f0f0; /* Light grey background color */
+  overflow-y: hidden; /* Prevent the page itself from scrolling */
 }
 
 .statuses-container {

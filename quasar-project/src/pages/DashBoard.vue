@@ -9,7 +9,7 @@
       <div class="q-card-primary q-card-container row no-wrap text-white">
         <div class="col column">
           <div class="q-card-title">
-            <big class="text-bold rm-num">{{ room.number }}</big>
+            <big class="text-bold rm-num">{{ formatRoomNumber(room.number) }}</big>
           </div>
           <div class="q-card-subtitle"></div>
         </div>
@@ -48,7 +48,12 @@ export default {
     async loadRooms() {
       try {
         const response = await axios.get('http://localhost:3001/api/rooms');
-        this.rooms = response.data;
+        // Sort rooms by room number after fetching
+        this.rooms = response.data.sort((a, b) => {
+          const roomA = parseInt(a.number.replace('room-', ''));
+          const roomB = parseInt(b.number.replace('room-', ''));
+          return roomA - roomB;
+        });
       } catch (error) {
         console.error('Error loading rooms:', error);
       }
@@ -58,6 +63,9 @@ export default {
         path: '/change-status',
         query: { room: JSON.stringify(room) },
       });
+    },
+    formatRoomNumber(roomNumber) {
+      return `Room ${roomNumber.replace('room-', '')}`;
     },
   },
   mounted() {
@@ -123,5 +131,4 @@ export default {
 .rm-num {
   color: black;
 }
-
 </style>
