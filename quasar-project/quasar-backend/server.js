@@ -14,7 +14,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_ORIGIN || 'http://localhost:9000',
+    origin: process.env.FRONTEND_ORIGIN || ['http://localhost:9000', 'http://<192.168.2.32>:9000'],
   },
 });
 
@@ -41,7 +41,7 @@ mongoose
     app.use('/api/rooms', rooms);
 
     // Start the server
-    httpServer.listen(port, () => {
+    httpServer.listen(port, '0.0.0.0', () => {
       console.log(`Server running on port ${port}`);
     });
   })

@@ -1,5 +1,5 @@
 <template>
-  <div class="fullscreen" :style="{ backgroundColor: roomStatus?.color || '#fff' }" @click="toggleButtons">
+  <div class="fullscreen" :style="{ backgroundColor: roomStatus?.color || '#fff' }" @click="toggleMenu">
     <div class="header" :style="{ backgroundColor: headerColor }">
       <div class="row items-center">
         <div class="col">
@@ -13,13 +13,14 @@
     <div class="mc-status-main">
       <span class="mc-room-status">{{ roomStatus?.text || 'Loading...' }}</span>
     </div>
-    <div v-if="buttonsVisible">
-      <button
-        class="q-btn q-btn-round q-btn-big q-btn-outline text-white cursor-pointer"
-        id="mc-status-select-button"
-      >
-        <i aria-hidden="true" class="q-icon material-icons">menu</i>
-      </button>
+    <div v-if="menuVisible">
+      <q-menu v-model="menuVisible" anchor="center middle">
+        <q-list>
+          <q-item v-for="status in statuses" :key="status._id" clickable @click="changeStatus(status)">
+            <q-item-section>{{ status.name }}</q-item-section>
+          </q-item>
+        </q-list>
+      </q-menu>
       <button
         class="q-btn q-btn-round q-btn-big q-btn-outline text-white cursor-pointer"
         id="mc-exit-button"
@@ -40,17 +41,22 @@ export default {
     return {
       roomStatus: null,
       headerColor: '#A45C28', // Default header color
-      buttonsVisible: false, // State to manage button visibility
+      menuVisible: false, // Menu visibility state
+      statuses: [] // Array to store all statuses
     };
   },
   async mounted() {
     try {
-      const response = await axios.get('http://localhost:3001/api/rooms/room-2');
-      this.roomStatus = response.data.status;
+      const roomResponse = await axios.get('http://localhost:3001/api/rooms/room-2');
+      this.roomStatus = roomResponse.data.status;
       // Calculate the darker header color
       this.headerColor = this.darkenColor(this.roomStatus.color, 0.8);
+      
+      // Load all statuses
+      const statusesResponse = await axios.get('http://localhost:3001/api/statuses');
+      this.statuses = statusesResponse.data;
     } catch (error) {
-      console.error('Error fetching room status:', error);
+      console.error('Error fetching room status or statuses:', error);
     }
   },
   methods: {
@@ -69,10 +75,21 @@ export default {
 
       return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
     },
-    toggleButtons() {
-      this.buttonsVisible = !this.buttonsVisible;
+    toggleMenu() {
+      this.menuVisible = !this.menuVisible;
     },
-  },
+    async changeStatus(status) {
+      try {
+        // Update room status on the server
+        await axios.put(`http://localhost:3001/api/rooms/room-2`, { status });
+        this.roomStatus = status; // Update the status locally
+        this.headerColor = this.darkenColor(status.color, 0.8); // Update header color
+        this.menuVisible = false; // Close the menu
+      } catch (error) {
+        console.error('Error updating room status:', error);
+      }
+    }
+  }
 };
 </script>
 
@@ -133,10 +150,6 @@ export default {
   bottom: 20px;
   margin: 10px;
   cursor: pointer; /* Ensure cursor is pointer when hovering */
-}
-
-#mc-status-select-button {
-  left: 20px;
 }
 
 #mc-exit-button {

@@ -79,25 +79,27 @@ export default {
 .q-page {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Full viewport height */
+  height: 100vh; /* Full viewport height */
   background-color: #f0f0f0; /* Light grey background color */
+  padding: 0; /* Remove padding to avoid cut-off */
+  margin: 0; /* Remove margin */
 }
 
 .statuses-page {
   display: flex;
   flex-direction: column;
   flex-grow: 1; /* Grow to fill available space */
-  padding: 0 20px 20px; /* Add horizontal and bottom padding */
-  padding-top: 70px; /* Separate top padding to accommodate header or fixed elements */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
   background-color: #f0f0f0; /* Light grey background color */
-  overflow-y: hidden; /* Prevent the page itself from scrolling */
 }
 
 .statuses-container {
   flex-grow: 1; /* Ensure it takes up the remaining space */
   overflow-y: auto; /* Add scroll if content overflows */
   background-color: #f0f0f0; /* Ensure the background color is consistent */
-  margin-top: 20px; /* Adjust if needed to fit content */
+  padding: 20px; /* Add padding if needed for internal spacing */
+  margin: 0; /* Remove margin */
 }
 
 .add-btn {
