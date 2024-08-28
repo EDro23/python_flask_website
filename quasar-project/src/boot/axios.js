@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { logout } from 'src/services/authService';
 
+
 axios.defaults.baseURL = 'http://localhost:3001/api';
 
 axios.interceptors.response.use(

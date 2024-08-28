@@ -14,13 +14,13 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_ORIGIN || ['http://localhost:9000', 'http://<192.168.2.32>:9000'],
+    origin: process.env.FRONTEND_ORIGIN || ['http://localhost:9000', 'http://<192.168.2.32>:9000', '0.0.0.0'],
   },
 });
 
 const port = process.env.PORT || 3001;
 const dbURI = process.env.MONGODB_URI;
-const frontendOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:9000';
+const frontendOrigin = process.env.FRONTEND_ORIGIN || ['http://localhost:9000','0.0.0.0'];
 
 // Middleware
 app.use(cors({ origin: frontendOrigin }));
