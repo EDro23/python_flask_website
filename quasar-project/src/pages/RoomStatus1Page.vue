@@ -106,6 +106,7 @@ export default {
 
 .header {
   width: 100%;
+  height:100%;
   padding: 1rem;
 }
 
@@ -119,6 +120,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 50px;
 }
 
 .mc-company-logo {
@@ -143,6 +145,7 @@ export default {
   font-size: 7rem;
   margin-bottom: 500px;
   margin-right: 750px;
+  display: flex;
 }
 
 .q-btn {
