@@ -1,4 +1,3 @@
-// server.js
 require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
@@ -14,16 +13,33 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_ORIGIN || ['http://localhost:9000', 'http://<192.168.2.32>:9000', '0.0.0.0'],
+    origin: '*',  // Allow all origins for WebSocket connections
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allow common HTTP methods
   },
 });
 
 const port = process.env.PORT || 3001;
 const dbURI = process.env.MONGODB_URI;
-const frontendOrigin = process.env.FRONTEND_ORIGIN || ['http://localhost:9000','0.0.0.0'];
 
 // Middleware
-app.use(cors({ origin: frontendOrigin }));
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow specific origins or allow all in development mode
+    const allowedOrigins = [
+      'http://localhost:9000',
+      'http://127.0.0.1:8080',
+      'http://192.168.2.32:8080'
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allow common HTTP methods
+  credentials: true  // Enable cookies and HTTP authentication
+}));
+
 app.use(bodyParser.json());
 
 if (!dbURI) {
