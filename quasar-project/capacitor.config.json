@@ -1,5 +1,5 @@
 {
   "appId": "ca.msmcstatus.app",
   "appName": "Room Status",
-  "webDir": "www"
+  "webDir": "dist/spa"
 }

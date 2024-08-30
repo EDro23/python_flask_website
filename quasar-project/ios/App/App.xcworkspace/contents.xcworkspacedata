@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:"
+      name = "">
+      <FileRef
+         location = "group:App.xcodeproj">
+      </FileRef>
+      <Group
+         location = "group:App"
+         name = "App">
+         <Group
+            location = "group:Assets.xcassets"
+            name = "Assets.xcassets">
+            <Group
+               location = "group:AppIcon.appiconset"
+               name = "AppIcon.appiconset">
+               <FileRef
+                  location = "group:AppIcon-512@2x.png">
+               </FileRef>
+               <FileRef
+                  location = "group:Contents.json">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:Contents.json">
+            </FileRef>
+            <Group
+               location = "group:Splash.imageset"
+               name = "Splash.imageset">
+               <FileRef
+                  location = "group:splash-2732x2732.png">
+               </FileRef>
+               <FileRef
+                  location = "group:splash-2732x2732-1.png">
+               </FileRef>
+               <FileRef
+                  location = "group:Contents.json">
+               </FileRef>
+               <FileRef
+                  location = "group:splash-2732x2732-2.png">
+               </FileRef>
+            </Group>
+         </Group>
+         <Group
+            location = "group:Base.lproj"
+            name = "Base.lproj">
+            <FileRef
+               location = "group:LaunchScreen.storyboard">
+            </FileRef>
+            <FileRef
+               location = "group:Main.storyboard">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:config.xml">
+         </FileRef>
+         <Group
+            location = "group:public"
+            name = "public">
+            <FileRef
+               location = "group:right-pinky.png">
+            </FileRef>
+            <FileRef
+               location = "group:index.html">
+            </FileRef>
+            <FileRef
+               location = "group:msmc_medical_logo.png">
+            </FileRef>
+            <FileRef
+               location = "group:cordova.js">
+            </FileRef>
+            <FileRef
+               location = "group:myclinic-logo-white.png">
+            </FileRef>
+            <FileRef
+               location = "group:left-pinky.png">
+            </FileRef>
+            <FileRef
+               location = "group:favicon.png">
+            </FileRef>
+            <FileRef
+               location = "group:msmc_medical_logo_b.png">
+            </FileRef>
+            <FileRef
+               location = "group:cordova_plugins.js">
+            </FileRef>
+            <Group
+               location = "group:assets"
+               name = "assets">
+               <FileRef
+                  location = "group:axios.03b59c82.js">
+               </FileRef>
+               <FileRef
+                  location = "group:KFOlCnqEu92Fr1MmWUlfBBc-.e0fd57c0.woff">
+               </FileRef>
+               <FileRef
+                  location = "group:KFOmCnqEu92Fr1Mu4mxM.f2abf7fb.woff">
+               </FileRef>
+               <FileRef
+                  location = "group:KFOlCnqEu92Fr1MmYUtfBBc-.f6537e32.woff">
+               </FileRef>
+               <FileRef
+                  location = "group:KFOlCnqEu92Fr1MmSU5fBBc-.bf14c7d7.woff">
+               </FileRef>
+               <FileRef
+                  location = "group:flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.4a4dbc62.woff2">
+               </FileRef>
+               <FileRef
+                  location = "group:index.b9ea4251.js">
+               </FileRef>
+               <FileRef
+                  location = "group:index.7cb5f1c1.css">
+               </FileRef>
+               <FileRef
+                  location = "group:flUhRq6tzZclQEJ-Vdg-IuiaDsNa.fd84f88b.woff">
+               </FileRef>
+               <FileRef
+                  location = "group:KFOkCnqEu92Fr1MmgVxIIzQ.34e9582c.woff">
+               </FileRef>
+               <FileRef
+                  location = "group:KFOlCnqEu92Fr1MmEU9fBBc-.9ce7f3ac.woff">
+               </FileRef>
+            </Group>
+         </Group>
+         <FileRef
+            location = "group:capacitor.config.json">
+         </FileRef>
+         <FileRef
+            location = "group:AppDelegate.swift">
+         </FileRef>
+         <FileRef
+            location = "group:Info.plist">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:App.xcworkspace">
+      </FileRef>
+      <FileRef
+         location = "group:Podfile">
+      </FileRef>
+   </Group>
+</Workspace>
