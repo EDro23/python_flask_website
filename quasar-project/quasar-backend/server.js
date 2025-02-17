@@ -50,6 +50,12 @@ if (!dbURI) {
   process.exit(1);
 }
 
+app.use((req, res, next) => {
+  console.log(`🔍 Incoming request: ${req.method} ${req.originalUrl}`);
+  next();
+});
+
+
 // Debug Route: Check if API is running
 app.get('/test-api', (req, res) => {
   console.log("✅ Received request at /test-api");
