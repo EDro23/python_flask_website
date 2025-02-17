@@ -52,6 +52,13 @@ app.get('/test-api', (req, res) => {
   res.json({ message: "API is working!" });
 });
 
+// Debug line 2
+app._router.stack.forEach((r) => {
+  if (r.route && r.route.path) {
+      console.log(`Registered route: ${r.route.path}`);
+  }
+});
+
 // Connect to MongoDB
 mongoose
   .connect(dbURI)
