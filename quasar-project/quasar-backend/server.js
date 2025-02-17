@@ -47,6 +47,11 @@ if (!dbURI) {
   process.exit(1);
 }
 
+// Debug line
+app.get('/test-api', (req, res) => {
+  res.json({ message: "API is working!" });
+});
+
 // Connect to MongoDB
 mongoose
   .connect(dbURI)
