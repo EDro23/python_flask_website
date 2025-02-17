@@ -21,6 +21,9 @@ const io = new Server(httpServer, {
 const port = process.env.PORT || 3001;
 const dbURI = process.env.MONGODB_URI;
 
+// Debug: Confirm that MONGODB_URI is loaded
+console.log("🔍 MongoDB URI:", dbURI);
+
 // Middleware
 app.use(cors({
   origin: function (origin, callback) {
@@ -43,19 +46,21 @@ app.use(cors({
 app.use(bodyParser.json());
 
 if (!dbURI) {
-  console.error('MONGODB_URI is not defined in .env file');
+  console.error('❌ ERROR: MONGODB_URI is not defined in .env file');
   process.exit(1);
 }
 
-// Debug line
+// Debug Route: Check if API is running
 app.get('/test-api', (req, res) => {
+  console.log("✅ Received request at /test-api");
   res.json({ message: "API is working!" });
 });
 
-// Debug line 2
+// Debug Route: Log all registered routes
+console.log("🔍 Checking registered routes BEFORE MongoDB connection...");
 app._router.stack.forEach((r) => {
   if (r.route && r.route.path) {
-      console.log(`Registered route: ${r.route.path}`);
+    console.log(`✅ Registered route: ${r.route.path}`);
   }
 });
 
@@ -63,26 +68,37 @@ app._router.stack.forEach((r) => {
 mongoose
   .connect(dbURI)
   .then(() => {
-    console.log('Connected to MongoDB Successfully!');
+    console.log('✅ Connected to MongoDB Successfully!');
+    
+    console.log("🔍 Loading routes...");
     app.use('/api/statuses', statuses(io));  // Pass io to statuses route
     app.use('/api/auth', auth);
     app.use('/api/rooms', rooms);
+    console.log("✅ Routes loaded successfully!");
+
+    // Debug Route: Log all registered routes again after adding auth/statuses
+    console.log("🔍 Checking registered routes AFTER MongoDB connection...");
+    app._router.stack.forEach((r) => {
+      if (r.route && r.route.path) {
+        console.log(`✅ Registered route: ${r.route.path}`);
+      }
+    });
 
     // Start the server
     httpServer.listen(port, '0.0.0.0', () => {
-      console.log(`Server running on port ${port}`);
+      console.log(`🚀 Server running on port ${port}`);
     });
   })
   .catch((err) => {
-    console.error('MongoDB connection error:', err);
+    console.error('❌ MongoDB connection error:', err);
   });
 
 // WebSocket setup
 io.on('connection', (socket) => {
-  console.log('Client connected:', socket.id);
+  console.log('⚡️ Client connected:', socket.id);
 
   socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
+    console.log('⚡️ Client disconnected:', socket.id);
   });
 });
 
