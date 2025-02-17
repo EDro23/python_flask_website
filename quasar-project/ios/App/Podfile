@@ -1,8 +1,11 @@
 platform :ios, '17.5'
 
+use_frameworks!
+
 target 'App' do
   # Pods for App
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
-  pod 'CapacitorCommunitySqlite', :path => '../../node_modules/@capacitor-community/sqlite'
+  pod 'CapacitorCommunitySqlite', :path => '../../node_modules/@capacitor-community/sqlite', :modular_headers => true
+  pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios', :modular_headers => true
   # Add other pods here
 end
