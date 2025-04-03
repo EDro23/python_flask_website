@@ -53,7 +53,7 @@ export default {
     },
     async loadStatuses() {
       try {
-        const response = await axios.get('http://localhost:3001/api/statuses');
+        const response = await axios.get('/statuses');
         this.statuses = response.data;
       } catch (error) {
         console.error('Error loading statuses:', error);

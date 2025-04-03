@@ -100,7 +100,7 @@ export default {
         };
 
         // Send a POST request to the backend
-        await axios.post('http://localhost:3001/api/statuses/add', newStatus);
+        await axios.post('/statuses/add', newStatus);
 
         // Redirect to the statuses page after successful creation
         this.$router.push('/statuses');

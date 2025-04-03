@@ -110,7 +110,7 @@ export default {
       const id = this.$route.params.id;
       console.log('Attempting to load status with ID:', id); // Debugging line
       try {
-        const response = await axios.get(`http://localhost:3001/api/statuses/${id}`);
+        const response = await axios.get(`/statuses/${id}`);
         console.log('Status loaded successfully:', response.data); // Debugging line
         this.status = response.data;
       } catch (error) {

@@ -54,7 +54,7 @@ export default {
     },
     async loadStatuses() {
       try {
-        const response = await axios.get('http://localhost:3001/api/statuses');
+        const response = await axios.get('/statuses');
         this.statusOptions = response.data.map(status => ({
           id: status._id,
           name: status.name,

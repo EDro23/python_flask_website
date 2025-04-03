@@ -47,7 +47,7 @@ export default {
   methods: {
     async loadRooms() {
       try {
-        const response = await axios.get('http://localhost:3001/api/rooms');
+        const response = await axios.get('/rooms');
         // Sort rooms by room number after fetching
         this.rooms = response.data.sort((a, b) => {
           const roomA = parseInt(a.number.replace('room-', ''));

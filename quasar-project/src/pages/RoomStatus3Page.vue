@@ -47,13 +47,13 @@ export default {
   },
   async mounted() {
     try {
-      const roomResponse = await axios.get('http://localhost:3001/api/rooms/room-3');
+      const roomResponse = await axios.get('/rooms/room-3');
       this.roomStatus = roomResponse.data.status;
       // Calculate the darker header color
       this.headerColor = this.darkenColor(this.roomStatus.color, 0.8);
       
       // Load all statuses
-      const statusesResponse = await axios.get('http://localhost:3001/api/statuses');
+      const statusesResponse = await axios.get('/statuses');
       this.statuses = statusesResponse.data;
     } catch (error) {
       console.error('Error fetching room status or statuses:', error);
@@ -81,7 +81,7 @@ export default {
     async changeStatus(status) {
       try {
         // Update room status on the server
-        await axios.put(`http://localhost:3001/api/rooms/room-3`, { status });
+        await axios.put(`/rooms/room-3`, { status });
         this.roomStatus = status; // Update the status locally
         this.headerColor = this.darkenColor(status.color, 0.8); // Update header color
         this.menuVisible = false; // Close the menu

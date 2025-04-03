@@ -24,15 +24,17 @@ export default {
     console.log('Fetching status for room number:', roomNumber); // Debugging line
 
     try {
-      const response = await axios.get(`http://localhost:3001/api/rooms/${roomNumber}`);
+      const response = await axios.get(`/rooms/${roomNumber}`);
       console.log('Room status fetched:', response.data); // Debugging line
       this.roomStatus = response.data.status;
 
-      // Set up WebSocket connection
-      this.socket = io('http://localhost:3001');
+      // ✅ Set up WebSocket connection to Render backend
+      this.socket = io('https://quasar-status-app.onrender.com');
       this.socket.on('statusUpdated', (updatedStatus) => {
         console.log('Received status update via WebSocket:', updatedStatus); // Debugging line
-        if (updatedStatus._id === response.data._id) {
+
+        // Optional: improve update condition if roomStatus is deeply compared
+        if (updatedStatus.text && updatedStatus.color) {
           this.roomStatus = updatedStatus;
         }
       });
