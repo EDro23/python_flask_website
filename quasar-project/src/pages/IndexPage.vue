@@ -36,7 +36,7 @@
           </div>
         </div>
         <p class="text-center light-paragraph">
-          <small>Developed by MainStreet Medical</small>
+          <small>Developed by MainStreet</small>
         </p>
       </div>
     </div>
@@ -58,7 +58,7 @@ export default {
   methods: {
     async signIn() {
       try {
-        const response = await axios.post('http://localhost:3001/api/auth/login', {
+        const response = await axios.post('https://quasar-status-app.onrender.com/api/auth/login', {
           email: this.email,
           password: this.password
         });
@@ -80,7 +80,7 @@ export default {
           }
         } else if (error.request) {
           // Request was made but no response was received
-          console.error('Login failed: No response received');
+          // console.error('Login failed: No response received');
           this.errorMessage = 'Login failed. Please try again later.';
         } else {
           // Something happened in setting up the request that triggered an Error

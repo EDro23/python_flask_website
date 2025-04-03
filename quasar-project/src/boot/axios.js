@@ -2,8 +2,8 @@
 import axios from 'axios';
 import { logout } from 'src/services/authService';
 
-
-axios.defaults.baseURL = 'http://localhost:3001/api';
+// 🔁 ✅ Set to your Render-deployed backend URL
+axios.defaults.baseURL = 'https://quasar-status-app.onrender.com/api';
 
 axios.interceptors.response.use(
   response => response,

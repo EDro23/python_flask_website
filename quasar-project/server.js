@@ -24,7 +24,7 @@ const storedUser = {
   password: '$2b$10$NuGURSq5gvIq7aBg5YEgt.iELBGwxmr7OE2YbWsXw4Z4X8vnT.wna' // Replace with your hashed password
 };
 
-app.post('/login', async (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
   const { username, password } = req.body;
 
   console.log('Received request:', { username, password });
@@ -52,6 +52,8 @@ app.post('/login', async (req, res) => {
     res.status(401).send('Username or Password did not match, Please try Again.');
   }
 });
+
+
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

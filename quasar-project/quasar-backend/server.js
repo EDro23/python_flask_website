@@ -13,62 +13,65 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: '*',  // Allow all origins for WebSocket connections
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allow common HTTP methods
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
   },
 });
 
 const port = process.env.PORT || 3001;
 const dbURI = process.env.MONGODB_URI;
 
-// Debug: Confirm that MONGODB_URI is loaded
 console.log("🔍 MongoDB URI:", dbURI);
 
-// Middleware
+// ✅ Updated CORS Middleware
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow specific origins or allow all in development mode
+    console.log('🛰️ Incoming CORS request from origin:', origin || 'null (no origin)');
     const allowedOrigins = [
       'http://localhost:9000',
       'http://127.0.0.1:8080',
-      'http://192.168.2.32:8080'
+      'http://192.168.2.32:8080',
+      'capacitor://localhost',
+      'http://localhost',
+      'https://quasar-status-app.onrender.com'
     ];
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin) || origin === 'null') {
       callback(null, true);
     } else {
+      console.log('❌ Blocked by CORS:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allow common HTTP methods
-  credentials: true  // Enable cookies and HTTP authentication
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
 }));
 
 app.use(bodyParser.json());
 
-if (!dbURI) {
-  console.error('❌ ERROR: MONGODB_URI is not defined in .env file');
-  process.exit(1);
-}
-
+// Log incoming requests
 app.use((req, res, next) => {
   console.log(`🔍 Incoming request: ${req.method} ${req.originalUrl}`);
   next();
 });
 
-
-// Debug Route: Check if API is running
+// Debug Route
 app.get('/test-api', (req, res) => {
   console.log("✅ Received request at /test-api");
   res.json({ message: "API is working!" });
 });
 
-// Debug Route: Log all registered routes
+// Log all routes before DB connection
 console.log("🔍 Checking registered routes BEFORE MongoDB connection...");
 app._router.stack.forEach((r) => {
   if (r.route && r.route.path) {
     console.log(`✅ Registered route: ${r.route.path}`);
   }
 });
+
+if (!dbURI) {
+  console.error('❌ ERROR: MONGODB_URI is not defined in .env file');
+  process.exit(1);
+}
 
 // Connect to MongoDB
 mongoose
@@ -77,12 +80,12 @@ mongoose
     console.log('✅ Connected to MongoDB Successfully!');
     
     console.log("🔍 Loading routes...");
-    app.use('/api/statuses', statuses(io));  // Pass io to statuses route
+    app.use('/api/statuses', statuses(io));
     app.use('/api/auth', auth);
     app.use('/api/rooms', rooms);
     console.log("✅ Routes loaded successfully!");
 
-    // Debug Route: Log all registered routes again after adding auth/statuses
+    // Log routes after loading
     console.log("🔍 Checking registered routes AFTER MongoDB connection...");
     app._router.stack.forEach((r) => {
       if (r.route && r.route.path) {
@@ -90,7 +93,6 @@ mongoose
       }
     });
 
-    // Start the server
     httpServer.listen(port, '0.0.0.0', () => {
       console.log(`🚀 Server running on port ${port}`);
     });
