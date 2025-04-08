@@ -2,12 +2,12 @@
   <q-page padding>
     <div class="statuses-page">
       <q-btn fab icon="add" @click="goToNewStatus" class="add-btn" color="primary" />
-      
+
       <div class="statuses-container">
         <q-list>
           <q-item
             v-for="status in statuses"
-            :key="status.id"
+            :key="status._id"
             class="status-item"
             @click.stop="selectStatus(status)"
           >
@@ -53,66 +53,66 @@ export default {
     },
     async loadStatuses() {
       try {
-        const response = await axios.get('/statuses');
+        const response = await axios.get('/api/statuses');
+        console.log('✅ Statuses loaded:', response.data); // Debug log
         this.statuses = response.data;
       } catch (error) {
-        console.error('Error loading statuses:', error);
+        console.error('❌ Error loading statuses:', error);
       }
     },
     showActions(status, event) {
       event.stopPropagation(); // Prevent click from bubbling up
       this.currentStatus = status;
-      this.$router.push({ path: `/statuses/edit/${status._id}` }); // Navigate to edit page
+      this.$router.push({ path: `/statuses/edit/${status._id}` });
     },
     selectStatus(status) {
-      // Add logic to handle clicking on a status if needed
+      // Optional: handle click on a status
     }
   },
   mounted() {
-    this.loadStatuses(); // Load statuses when component is mounted
+    this.loadStatuses();
   }
 };
 </script>
 
 <style scoped>
-/* Ensure the page fills the viewport height and uses flexbox */
 .q-page {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full viewport height */
-  background-color: #f0f0f0; /* Light grey background color */
-  padding: 0; /* Remove padding to avoid cut-off */
-  margin: 0; /* Remove margin */
+  height: 100vh;
+  background-color: #f0f0f0;
+  padding: 0;
+  margin: 0;
 }
 
 .statuses-page {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Grow to fill available space */
-  padding: 0; /* Remove padding */
-  margin: 0; /* Remove margin */
-  background-color: #f0f0f0; /* Light grey background color */
+  flex-grow: 1;
+  padding: 0;
+  margin: 0;
+  background-color: #f0f0f0;
 }
 
 .statuses-container {
-  flex-grow: 1; /* Ensure it takes up the remaining space */
-  overflow-y: auto; /* Add scroll if content overflows */
-  background-color: #f0f0f0; /* Ensure the background color is consistent */
-  padding: 20px; /* Add padding if needed for internal spacing */
-  margin: 0; /* Remove margin */
+  flex-grow: 1;
+  overflow-y: auto;
+  background-color: #f0f0f0;
+  padding: 20px;
+  margin: 0;
 }
 
 .add-btn {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 1; /* Ensure the button is above other elements */
+  z-index: 1;
 }
 
 .status-item {
   margin: 0;
   padding: 20px 0;
-  border-bottom: 1px solid #e0e0e0; /* Light grey line */
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .mc-color-swatch {

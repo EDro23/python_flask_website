@@ -6,24 +6,9 @@
       </div>
       <div>
         <form @submit.prevent="createStatus">
-          <q-input
-            v-model="name"
-            label="Name"
-            dense
-            class="q-mb-md custom-input"
-          />
-          <q-input
-            v-model="text"
-            label="Text"
-            dense
-            class="q-mb-md custom-input"
-          />
-          <q-input
-            v-model="color"
-            label="Color"
-            dense
-            class="q-mb-md custom-input"
-          />
+          <q-input v-model="name" label="Name" dense class="q-mb-md custom-input" />
+          <q-input v-model="text" label="Text" dense class="q-mb-md custom-input" />
+          <q-input v-model="color" label="Color" dense class="q-mb-md custom-input" />
 
           <div class="vc-compact q-mb-md">
             <ul class="vc-compact-colors">
@@ -33,9 +18,7 @@
                 :style="{ background: colorOption }"
                 class="vc-compact-color-item"
                 @click="selectColor(colorOption)"
-              >
-                <!-- Ensure no dot element is present -->
-              </li>
+              />
             </ul>
           </div>
 
@@ -46,9 +29,7 @@
                 <div class="q-card-title">
                   <big class="text-bold">Room #</big>
                 </div>
-                <div class="q-card-subtitle"></div>
               </div>
-              <div class="col-auto self-center q-card-title-extra"></div>
             </div>
             <div class="q-card-main q-card-container mc-room-status" :style="{ backgroundColor: color }">
               <big class="text-bold">{{ text }}</big>
@@ -99,14 +80,17 @@ export default {
           color: this.color
         };
 
-        // Send a POST request to the backend
-        await axios.post('/statuses/add', newStatus);
+        // ✅ Use your full deployed API URL
+        await axios.post('https://quasar-status-app.onrender.com/api/statuses/add', newStatus);
 
-        // Redirect to the statuses page after successful creation
         this.$router.push('/statuses');
       } catch (error) {
-        console.error('Error creating status:', error);
-        // Handle error appropriately
+        console.error('❌ Error creating status:', error.message);
+        if (error.response) {
+          console.error('🔴 Server responded with:', error.response.data);
+        } else if (error.request) {
+          console.error('🛑 No response received:', error.request);
+        }
       }
     },
     cancel() {
@@ -125,63 +109,38 @@ export default {
   border: none !important;
   box-shadow: none !important;
 }
-
 .custom-input .q-field__label {
   color: #000 !important;
 }
-
 .vc-compact-colors {
   display: flex;
   flex-wrap: wrap;
   margin-left: -40px;
 }
-
 .vc-compact-color-item {
   width: 30px;
   height: 30px;
   margin: 2px;
   cursor: pointer;
-  position: relative;
   border: 2px solid white;
   box-shadow: 0 0 5px rgba(15, 15, 15, 0.5);
 }
-
-.vc-compact-color-item::before,
-.vc-compact-color-item::after {
-  content: none !important;
-}
-
-.vc-compact-color-item:focus,
-.vc-compact-color-item:active {
-  outline: none !important;
-}
-
 .q-mb-md {
   margin-bottom: 16px;
 }
-
 .q-pt-md {
   padding-top: 16px;
 }
-
 .text-bold {
   color: white;
 }
-
 .status-top {
   font-family: Arial, Helvetica, sans-serif;
-  display: flex;
   margin-bottom: -10px;
 }
-
-.vc-compact-colors li::marker {
-  content: none !important;
-}
-
 .create-status-btn .q-btn__content {
   color: white !important;
 }
-
 .cancel-btn .q-btn__content {
   color: black !important;
 }
