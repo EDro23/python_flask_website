@@ -53,7 +53,7 @@ export default {
     },
     async loadStatuses() {
       try {
-        const response = await axios.get('/api/statuses');
+        const response = await axios.get('/statuses');
         console.log('✅ Statuses loaded:', response.data); // Debug log
         this.statuses = response.data;
       } catch (error) {
