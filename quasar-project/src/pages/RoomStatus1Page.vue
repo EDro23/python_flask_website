@@ -1,18 +1,18 @@
 <template>
   <div class="fullscreen" :style="{ backgroundColor: roomStatus?.color || '#fff' }" @click="toggleMenu">
     <div class="header" :style="{ backgroundColor: headerColor }">
-      <div class="row items-center">
-        <div class="col">
-          <img src="https://firebasestorage.googleapis.com/v0/b/my-clinic-c19ba.appspot.com/o/msmc-logo.png?alt=media&token=c627c52e-c31f-4086-82b6-866aaaa1baf8" alt="Main Street Medical" class="mc-company-logo responsive">
-        </div>
-        <div class="col">
-          <span class="mc-room-number pull-right">01</span>
-        </div>
-      </div>
+      <img
+        src="https://firebasestorage.googleapis.com/v0/b/my-clinic-c19ba.appspot.com/o/msmc-logo.png?alt=media&token=c627c52e-c31f-4086-82b6-866aaaa1baf8"
+        alt="Main Street Medical"
+        class="mc-company-logo"
+      />
+      <span class="mc-room-number">01</span>
     </div>
+
     <div class="mc-status-main">
       <span class="mc-room-status">{{ roomStatus?.text || 'Loading...' }}</span>
     </div>
+
     <div v-if="menuVisible">
       <q-menu v-model="menuVisible" anchor="center middle">
         <q-list>
@@ -40,19 +40,17 @@ export default {
   data() {
     return {
       roomStatus: null,
-      headerColor: '#A45C28', // Default header color
-      menuVisible: false, // Menu visibility state
-      statuses: [] // Array to store all statuses
+      headerColor: '#A45C28',
+      menuVisible: false,
+      statuses: []
     };
   },
   async mounted() {
     try {
       const roomResponse = await axios.get('/rooms/room-1');
       this.roomStatus = roomResponse.data.status;
-      // Calculate the darker header color
       this.headerColor = this.darkenColor(this.roomStatus.color, 0.8);
-      
-      // Load all statuses
+
       const statusesResponse = await axios.get('/statuses');
       this.statuses = statusesResponse.data;
     } catch (error) {
@@ -80,11 +78,10 @@ export default {
     },
     async changeStatus(status) {
       try {
-        // Update room status on the server
         await axios.put(`/rooms/room-1`, { status });
-        this.roomStatus = status; // Update the status locally
-        this.headerColor = this.darkenColor(status.color, 0.8); // Update header color
-        this.menuVisible = false; // Close the menu
+        this.roomStatus = status;
+        this.headerColor = this.darkenColor(status.color, 0.8);
+        this.menuVisible = false;
       } catch (error) {
         console.error('Error updating room status:', error);
       }
@@ -98,40 +95,35 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100vh;
+  width: 100vw;
   color: white;
   text-align: center;
-}
-
-.header {
-  width: 100%;
-  height:100%;
+  overflow: hidden;
   padding: 1rem;
 }
 
-.row {
+.header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-}
-
-.col {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 50px;
+  justify-content: flex-start;
+  width: 100%;
+  padding-top: 2rem;
 }
 
 .mc-company-logo {
-  width: 750px;
-  height: 200px;
+  max-width: 90%;
+  height: auto;
+  margin-bottom: 1rem;
 }
 
 .mc-room-number {
-  font-size: 10rem;
-  display: flex;
-  margin-left: 700px;
+  font-size: 6rem;
+  font-weight: bold;
+  align-self: flex-end;
+  margin-right: 1rem;
 }
 
 .mc-status-main {
@@ -139,23 +131,21 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
 }
 
 .mc-room-status {
-  font-size: 7rem;
-  margin-bottom: 500px;
-  margin-right: 750px;
-  display: flex;
+  font-size: 4rem;
+  text-align: center;
+  word-break: break-word;
+  max-width: 90%;
 }
 
 .q-btn {
   position: absolute;
   bottom: 20px;
-  margin: 10px;
-  cursor: pointer; /* Ensure cursor is pointer when hovering */
-}
-
-#mc-exit-button {
   right: 20px;
+  margin: 10px;
+  cursor: pointer;
 }
 </style>
