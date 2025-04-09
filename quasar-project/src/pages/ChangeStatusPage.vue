@@ -3,7 +3,7 @@
     <div class="change-status-page">
       <q-card class="q-pa-md">
         <q-card-section>
-          <div class="text-h6">Change Status for Room {{ room ? room.number : 'N/A' }}</div>
+          <div class="text-h6">Change Status for Room </div>
         </q-card-section>
 
         <q-card-section v-if="room">
@@ -92,7 +92,7 @@ export default {
           };
 
           try {
-            await axios.put(`http://localhost:3001/api/rooms/${this.room.number}`, {
+            await axios.put(`rooms/${this.room.number}`, {
               status: this.room.status,
               primaryColor: this.room.primaryColor,
             });
