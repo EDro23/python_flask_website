@@ -123,7 +123,7 @@ export default {
     async saveStatus() {
       try {
         console.log('Saving status:', this.status);
-        await axios.put(`http://localhost:3001/api/statuses/${this.status._id}`, this.status);
+        await axios.put(`statuses/${this.status._id}`, this.status);
         console.log('Status saved successfully');
 
         // Redirect to the statuses page after saving
@@ -138,7 +138,7 @@ export default {
     async deleteStatus() {
       try {
         console.log('Deleting status:', this.status._id);
-        await axios.delete(`http://localhost:3001/api/statuses/${this.status._id}`);
+        await axios.delete(`statuses/${this.status._id}`);
         console.log('Status deleted successfully');
 
         // Close the dialog
