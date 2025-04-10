@@ -34,7 +34,7 @@ export default {
     await this.fetchRoomStatus(); // Initial fetch
     await this.loadStatuses();
 
-    // ⏱️ Start polling every 3 seconds, but not if the status is changed locally
+    // ⏱️ Start polling every 3 seconds, but polling will check for changes even if manually updated
     this.intervalId = setInterval(this.fetchRoomStatus, 3000);
   },
   beforeUnmount() {
@@ -50,8 +50,8 @@ export default {
         const response = await axios.get('/rooms/room-1');
         const newStatus = response.data.status;
 
-        // Only update room status if it wasn't changed manually
-        if (!this.isStatusUpdatedLocally && (!this.roomStatus || this.roomStatus._id !== newStatus._id)) {
+        // Update room status if it has changed, even when the status was changed locally
+        if (!this.isStatusUpdatedLocally || this.roomStatus._id !== newStatus._id) {
           this.roomStatus = newStatus;
           this.headerColor = this.darkenColor(newStatus.color, 0.8);
         }
@@ -71,14 +71,11 @@ export default {
       const selectedStatus = this.statuses.find(s => s.name === status.name);
 
       if (selectedStatus) {
-        // Manually change the status and stop polling updates
+        // Manually change the status and stop polling updates for now
         this.roomStatus = selectedStatus;
         this.headerColor = this.darkenColor(selectedStatus.color, 0.8);
         this.isStatusUpdatedLocally = true;
         this.menuVisible = false;
-
-        // Reset polling to avoid overwriting the manual change
-        clearInterval(this.intervalId);
 
         // Send the update to the server
         try {
@@ -92,11 +89,10 @@ export default {
         } catch (err) {
           console.error('Error updating status:', err);
         }
-
-        // After 5 seconds, resume polling
+        
+        // After 5 seconds, resume polling to check for updates from the dashboard
         setTimeout(() => {
           this.isStatusUpdatedLocally = false;
-          this.intervalId = setInterval(this.fetchRoomStatus, 3000);
         }, 5000);
       } else {
         console.error('Status not found:', status);
