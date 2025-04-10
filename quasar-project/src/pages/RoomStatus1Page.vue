@@ -30,7 +30,6 @@ export default {
   },
   async mounted() {
     try {
-      // Fetch the current room status and available statuses
       const roomResponse = await axios.get('/rooms/room-1');
       this.roomStatus = roomResponse.data.status;
       this.headerColor = this.darkenColor(this.roomStatus.color, 0.8);
@@ -45,29 +44,32 @@ export default {
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
     },
-    changeStatus(status) {
-      // Update room status on the server
-      axios
-        .put('/rooms/room-1', { statusId: status._id })
-        .then(() => {
-          // After the update, fetch the updated room status to reflect the change
+    async changeStatus(status) {
+      try {
+        // Update room status on the server
+        const response = await axios.put('/rooms/room-1', { statusId: status._id });
+
+        // After successful update, update the UI
+        if (response.status === 200) {
+          // Re-fetch room status to ensure consistency
           this.loadRoomStatus();
 
-          // Update UI with the new status
+          // Update header color to match the new status
           this.roomStatus = status;
           this.headerColor = this.darkenColor(status.color, 0.8);
           this.menuVisible = false;
-        })
-        .catch(err => console.error('Error updating status:', err));
+        }
+      } catch (err) {
+        console.error('Error updating status:', err);
+      }
     },
-    loadRoomStatus() {
-      // Re-fetch the room status after the update to ensure it's consistent
-      axios
-        .get('/rooms/room-1')
-        .then(response => {
-          this.roomStatus = response.data.status;
-        })
-        .catch(err => console.error('Error fetching room status:', err));
+    async loadRoomStatus() {
+      try {
+        const roomResponse = await axios.get('/rooms/room-1');
+        this.roomStatus = roomResponse.data.status;
+      } catch (err) {
+        console.error('Error fetching room status:', err);
+      }
     },
     goToDashboard() {
       this.$router.push('/dashboard');
