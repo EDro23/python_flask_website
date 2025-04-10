@@ -51,7 +51,7 @@ export default {
       if (selectedStatus) {
         // Update the room's status and color
         this.roomStatus = selectedStatus;
-        this.headerColor = this.darkenColor(selectedStatus.color, 0.8);
+        this.headerColor = this.darkenColor(selectedStatus.color, 0.8); // Update only the header color
         this.menuVisible = false;
 
         // Send the full status (text and color) to the backend for updating
@@ -59,9 +59,10 @@ export default {
           .put(`/rooms/room-2`, {
             status: {
               text: selectedStatus.text,
-              color: selectedStatus.color
+              color: selectedStatus.color, // This is for the header color
             },
-            primaryColor: selectedStatus.color, // Update the header color as well
+            // Keep the original room's background color (primaryColor) intact
+            primaryColor: this.roomStatus.primaryColor, // Do not change the background color
           })
           .then(() => {
             console.log('Room updated successfully');
