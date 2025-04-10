@@ -54,15 +54,17 @@ export default {
         this.headerColor = this.darkenColor(selectedStatus.color, 0.8); // Update only the header color
         this.menuVisible = false;
 
-        // Send the full status (text and color) to the backend for updating
+        // Reset the background color to white or whatever color you need
+        const primaryColor = '#FFFFFF';  // White or any color you want for the background
+
+        // Send the updated status and reset the primary background color
         axios
           .put(`/rooms/room-2`, {
             status: {
               text: selectedStatus.text,
               color: selectedStatus.color, // This is for the header color
             },
-            // Keep the original room's background color (primaryColor) intact
-            primaryColor: this.roomStatus.primaryColor, // Do not change the background color
+            primaryColor: primaryColor, // Reset the background color to white
           })
           .then(() => {
             console.log('Room updated successfully');
