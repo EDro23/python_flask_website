@@ -36,7 +36,7 @@
           </div>
         </div>
         <p class="text-center light-paragraph">
-          <small>Developed by MainStreet</small>
+          <small>Developed by MainStreet Medical Clinic</small>
         </p>
       </div>
     </div>

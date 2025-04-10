@@ -18,7 +18,7 @@
       <h5 class="section-header"><b>License Info</b></h5>
       <div class="license-info">
         <p>
-          © 2016—2024 MainStreet Medical Clinic.
+          © 2016—2025 MainStreet Medical Clinic.
         </p>
       </div>
       <div class="img-container">
