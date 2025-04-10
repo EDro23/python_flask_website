@@ -42,6 +42,7 @@ export default {
   data() {
     return {
       rooms: [],
+      pollingInterval: null,
     };
   },
   methods: {
@@ -70,6 +71,12 @@ export default {
   },
   mounted() {
     this.loadRooms();
+    // Start polling every 5 seconds
+    this.pollingInterval = setInterval(this.loadRooms, 5000);
+  },
+  beforeDestroy() {
+    // Clean up the polling interval when the component is destroyed
+    clearInterval(this.pollingInterval);
   },
 };
 </script>
