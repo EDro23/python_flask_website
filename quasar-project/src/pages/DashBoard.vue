@@ -74,7 +74,7 @@ export default {
     // Start polling every 5 seconds
     this.pollingInterval = setInterval(this.loadRooms, 5000);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     // Clean up the polling interval when the component is destroyed
     clearInterval(this.pollingInterval);
   },
