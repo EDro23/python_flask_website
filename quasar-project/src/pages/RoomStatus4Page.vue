@@ -1,42 +1,26 @@
 <template>
-  <div class="fullscreen" :style="{ backgroundColor: roomStatus?.color || '#fff' }" @click="toggleMenu">
-    <div class="header" :style="{ backgroundColor: headerColor }">
-      <img
-        src="https://firebasestorage.googleapis.com/v0/b/my-clinic-c19ba.appspot.com/o/msmc-logo.png?alt=media&token=c627c52e-c31f-4086-82b6-866aaaa1baf8"
-        alt="Main Street Medical"
-        class="mc-company-logo"
-      />
-      <span class="mc-room-number">04</span>
-    </div>
-
-    <div class="mc-status-main">
-      <span class="mc-room-status">{{ roomStatus?.text || 'Loading...' }}</span>
-    </div>
-
-    <div v-if="menuVisible">
-      <q-menu v-model="menuVisible" anchor="center middle">
-        <q-list>
-          <q-item v-for="status in statuses" :key="status._id" clickable @click="changeStatus(status)">
-            <q-item-section>{{ status.name }}</q-item-section>
-          </q-item>
-        </q-list>
-      </q-menu>
-      <button
-        class="q-btn q-btn-round q-btn-big q-btn-outline text-white cursor-pointer"
-        id="mc-exit-button"
-        @click.stop="goToDashboard"
-      >
-        <i aria-hidden="true" class="q-icon material-icons">exit_to_app</i>
-      </button>
-    </div>
-  </div>
+  <RoomLayout
+    :roomStatus="roomStatus"
+    :headerColor="headerColor"
+    roomNumber="04"
+    logoUrl="https://firebasestorage.googleapis.com/v0/b/my-clinic-c19ba.appspot.com/o/msmc-logo.png?alt=media&token=c627c52e-c31f-4086-82b6-866aaaa1baf8"
+    :menuVisible="menuVisible"
+    :statuses="statuses"
+    @background-click="toggleMenu"
+    @select-status="changeStatus"
+    @exit-click="goToDashboard"
+  />
 </template>
 
 <script>
 import axios from 'axios';
+import RoomLayout from 'src/components/RoomLayout.vue';
 
 export default {
   name: 'Room4StatusPage',
+  components: {
+    RoomLayout
+  },
   data() {
     return {
       roomStatus: null,
@@ -58,6 +42,21 @@ export default {
     }
   },
   methods: {
+    toggleMenu() {
+      this.menuVisible = !this.menuVisible;
+    },
+    changeStatus(status) {
+      axios
+        .put('/rooms/room-4', { statusId: status._id })
+        .then(() => {
+          this.roomStatus = status;
+          this.headerColor = this.darkenColor(status.color, 0.8);
+          this.menuVisible = false;
+        })
+        .catch((error) => {
+          console.error('Error updating status:', error);
+        });
+    },
     goToDashboard() {
       this.$router.push('/dashboard');
     },
@@ -66,80 +65,13 @@ export default {
       const r = parseInt(rawColor.substring(0, 2), 16);
       const g = parseInt(rawColor.substring(2, 4), 16);
       const b = parseInt(rawColor.substring(4, 6), 16);
+
       const newR = Math.floor(r * factor);
       const newG = Math.floor(g * factor);
       const newB = Math.floor(b * factor);
-      return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
-    },
-    toggleMenu() {
-      this.menuVisible = !this.menuVisible;
-    },
-    async changeStatus(status) {
-      try {
-        await axios.put(`/rooms/room-4`, { status });
-        this.roomStatus = status;
-        this.headerColor = this.darkenColor(status.color, 0.8);
-        this.menuVisible = false;
-      } catch (error) {
-        console.error('Error updating room status:', error);
-      }
+
+      return `rgb(${newR}, ${newG}, ${newB})`;
     }
   }
 };
 </script>
-
-<style scoped>
-.fullscreen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  color: white;
-  text-align: center;
-  position: relative;
-}
-
-.header {
-  width: 100%;
-  padding: 1rem;
-  position: relative;
-}
-
-.mc-company-logo {
-  max-width: 80%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-.mc-room-number {
-  position: absolute;
-  top: 1rem;
-  right: 2rem;
-  font-size: 7rem;
-  font-weight: bold;
-}
-
-.mc-status-main {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.mc-room-status {
-  font-size: 6rem;
-  font-weight: bold;
-  padding: 2rem;
-  text-align: center;
-}
-
-.q-btn {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  margin: 10px;
-  cursor: pointer;
-}
-</style>
