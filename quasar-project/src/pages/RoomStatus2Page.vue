@@ -45,14 +45,33 @@ export default {
       this.menuVisible = !this.menuVisible;
     },
     changeStatus(status) {
-      axios
-        .put('/rooms/room-2', { statusId: status._id })
-        .then(() => {
-          this.roomStatus = status;
-          this.headerColor = this.darkenColor(status.color, 0.8);
-          this.menuVisible = false;
-        })
-        .catch(err => console.error('Error updating status:', err));
+      // Find the selected status from the statuses list
+      const selectedStatus = this.statuses.find(s => s.name === status.name);
+
+      if (selectedStatus) {
+        // Update the room's status and color
+        this.roomStatus = selectedStatus;
+        this.headerColor = this.darkenColor(selectedStatus.color, 0.8);
+        this.menuVisible = false;
+
+        // Send the full status (text and color) to the backend for updating
+        axios
+          .put(`/rooms/room-2`, {
+            status: {
+              text: selectedStatus.text,
+              color: selectedStatus.color
+            },
+            primaryColor: selectedStatus.color, // Update the header color as well
+          })
+          .then(() => {
+            console.log('Room updated successfully');
+          })
+          .catch(err => {
+            console.error('Error updating status:', err);
+          });
+      } else {
+        console.error('Status not found:', status);
+      }
     },
     goToDashboard() {
       this.$router.push('/dashboard');

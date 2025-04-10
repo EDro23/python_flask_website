@@ -44,32 +44,15 @@ export default {
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
     },
-    async changeStatus(status) {
-      try {
-        // Update room status on the server
-        const response = await axios.put('/rooms/room-1', { statusId: status._id });
-
-        // After successful update, update the UI
-        if (response.status === 200) {
-          // Re-fetch room status to ensure consistency
-          this.loadRoomStatus();
-
-          // Update header color to match the new status
+    changeStatus(status) {
+      axios
+        .put('/rooms/room-1', { statusId: status._id })
+        .then(() => {
           this.roomStatus = status;
           this.headerColor = this.darkenColor(status.color, 0.8);
           this.menuVisible = false;
-        }
-      } catch (err) {
-        console.error('Error updating status:', err);
-      }
-    },
-    async loadRoomStatus() {
-      try {
-        const roomResponse = await axios.get('/rooms/room-1');
-        this.roomStatus = roomResponse.data.status;
-      } catch (err) {
-        console.error('Error fetching room status:', err);
-      }
+        })
+        .catch(err => console.error('Error updating status:', err));
     },
     goToDashboard() {
       this.$router.push('/dashboard');
