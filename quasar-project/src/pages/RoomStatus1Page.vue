@@ -6,9 +6,9 @@
     :logoUrl="logoUrl"
     :menuVisible="menuVisible"
     :statuses="statuses"
-    @background-click="toggleMenu"
-    @select-status="changeStatus"
-    @exit-click="goToDashboard"
+    @toggle-menu="toggleMenu"
+    @change-status="changeStatus"
+    @exit="goToDashboard"
   />
 </template>
 
@@ -62,12 +62,8 @@ export default {
       const r = parseInt(raw.substring(0, 2), 16);
       const g = parseInt(raw.substring(2, 4), 16);
       const b = parseInt(raw.substring(4, 6), 16);
-
-      const newR = Math.floor(r * factor);
-      const newG = Math.floor(g * factor);
-      const newB = Math.floor(b * factor);
-
-      return `rgb(${newR}, ${newG}, ${newB})`;
+      const darken = x => Math.floor(x * factor);
+      return `rgb(${darken(r)}, ${darken(g)}, ${darken(b)})`;
     }
   }
 };

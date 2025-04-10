@@ -2,13 +2,13 @@
   <RoomLayout
     :roomStatus="roomStatus"
     :headerColor="headerColor"
-    roomNumber="04"
-    logoUrl="https://firebasestorage.googleapis.com/v0/b/my-clinic-c19ba.appspot.com/o/msmc-logo.png?alt=media&token=c627c52e-c31f-4086-82b6-866aaaa1baf8"
+    roomNumber="01"
+    :logoUrl="logoUrl"
     :menuVisible="menuVisible"
     :statuses="statuses"
-    @background-click="toggleMenu"
-    @select-status="changeStatus"
-    @exit-click="goToDashboard"
+    @toggle-menu="toggleMenu"
+    @change-status="changeStatus"
+    @exit="goToDashboard"
   />
 </template>
 
@@ -18,13 +18,12 @@ import RoomLayout from 'src/components/RoomLayout.vue';
 
 export default {
   name: 'Room4StatusPage',
-  components: {
-    RoomLayout
-  },
+  components: { RoomLayout },
   data() {
     return {
       roomStatus: null,
       headerColor: '#A45C28',
+      logoUrl: 'https://firebasestorage.googleapis.com/v0/b/my-clinic-c19ba.appspot.com/o/msmc-logo.png?alt=media&token=c627c52e-c31f-4086-82b6-866aaaa1baf8',
       menuVisible: false,
       statuses: []
     };
@@ -53,24 +52,18 @@ export default {
           this.headerColor = this.darkenColor(status.color, 0.8);
           this.menuVisible = false;
         })
-        .catch((error) => {
-          console.error('Error updating status:', error);
-        });
+        .catch(err => console.error('Error updating status:', err));
     },
     goToDashboard() {
       this.$router.push('/dashboard');
     },
     darkenColor(color, factor) {
-      const rawColor = color.replace('#', '');
-      const r = parseInt(rawColor.substring(0, 2), 16);
-      const g = parseInt(rawColor.substring(2, 4), 16);
-      const b = parseInt(rawColor.substring(4, 6), 16);
-
-      const newR = Math.floor(r * factor);
-      const newG = Math.floor(g * factor);
-      const newB = Math.floor(b * factor);
-
-      return `rgb(${newR}, ${newG}, ${newB})`;
+      const raw = color.replace('#', '');
+      const r = parseInt(raw.substring(0, 2), 16);
+      const g = parseInt(raw.substring(2, 4), 16);
+      const b = parseInt(raw.substring(4, 6), 16);
+      const darken = x => Math.floor(x * factor);
+      return `rgb(${darken(r)}, ${darken(g)}, ${darken(b)})`;
     }
   }
 };
