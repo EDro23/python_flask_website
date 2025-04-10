@@ -27,26 +27,27 @@ export default {
       menuVisible: false,
       statuses: [],
       intervalId: null,
-      lastLocalChange: 0 // 🕒 Tracks last local change timestamp
+      ignoreNextPoll: false // 👈 this handles one-time skip
     };
   },
   async mounted() {
-    await this.fetchRoomStatus(); // Initial load
+    await this.fetchRoomStatus();
     await this.loadStatuses();
 
-    // ⏱ Poll every 3 seconds
     this.intervalId = setInterval(this.fetchRoomStatus, 3000);
   },
   beforeUnmount() {
-    clearInterval(this.intervalId); // 🧹 Clean up
+    clearInterval(this.intervalId);
   },
   methods: {
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
     },
     async fetchRoomStatus() {
-      const now = Date.now();
-      if (now - this.lastLocalChange < 5000) return; // 🚫 Skip if local change was recent
+      if (this.ignoreNextPoll) {
+        this.ignoreNextPoll = false;
+        return;
+      }
 
       try {
         const response = await axios.get('/rooms/room-1');
@@ -74,7 +75,8 @@ export default {
         this.roomStatus = status;
         this.headerColor = this.darkenColor(status.color, 0.8);
         this.menuVisible = false;
-        this.lastLocalChange = Date.now(); // 🕒 Update timestamp of local change
+
+        this.ignoreNextPoll = true; // ✅ skip one fetch cycle
       } catch (error) {
         console.error('Error updating status:', error);
       }
@@ -87,8 +89,14 @@ export default {
       const r = parseInt(raw.substring(0, 2), 16);
       const g = parseInt(raw.substring(2, 4), 16);
       const b = parseInt(raw.substring(4, 6), 16);
-      const darken = (c) => Math.max(0, Math.floor(c * factor));
-      return `rgb(${darken(r)}, ${darken(g)}, ${darken(b)})`;
+
+      const newR = Math.max(Math.floor(r * factor), 0);
+      const newG = Math.max(Math.floor(g * factor), 0);
+      const newB = Math.max(Math.floor(b * factor), 0);
+
+      return `#${[newR, newG, newB]
+        .map(c => c.toString(16).padStart(2, '0'))
+        .join('')}`;
     }
   }
 };
