@@ -4,13 +4,16 @@
     :style="{ backgroundColor: roomStatus?.color || '#fff' }"
     @click="$emit('toggle-menu')"
   >
-    <div class="header row items-center justify-between q-px-md q-py-md" :style="{ backgroundColor: headerColor }">
+    <div class="header row items-center justify-between q-px-md q-py-lg" :style="{ backgroundColor: headerColor }">
       <img
-        src="https://firebasestorage.googleapis.com/v0/b/my-clinic-c19ba.appspot.com/o/msmc-logo.png?alt=media&token=c627c52e-c31f-4086-82b6-866aaaa1baf8"
+        :src="logoUrl"
         alt="Company Logo"
         class="mc-company-logo"
+        style="height: 80px; object-fit: contain"
       />
-      <span class="mc-room-number text-white text-h4" style="font-weight: bold;">{{ roomNumber }}</span>
+      <span class="mc-room-number text-white text-h4" style="font-weight: bold;">
+        {{ roomNumber }}
+      </span>
     </div>
 
     <div class="mc-status-main q-mt-xl flex flex-center">
@@ -19,68 +22,86 @@
       </span>
     </div>
 
-    <q-menu v-model="menuVisible" anchor="center middle">
-      <q-list>
-        <q-item
-          v-for="status in statuses"
-          :key="status._id"
-          clickable
-          @click="$emit('change-status', status)"
-        >
-          <q-item-section>{{ status.name }}</q-item-section>
-        </q-item>
-      </q-list>
-    </q-menu>
+    <div v-if="menuVisible">
+      <q-menu v-model="menuOpen" anchor="center middle" self="center middle" :no-parent-event="true">
+        <q-list>
+          <q-item
+            v-for="status in statuses"
+            :key="status._id"
+            clickable
+            @click.stop="$emit('change-status', status)"
+          >
+            <q-item-section>{{ status.name }}</q-item-section>
+          </q-item>
+        </q-list>
+      </q-menu>
 
-    <div class="absolute-top-right q-ma-md">
-      <q-btn
-        round
-        icon="exit_to_app"
-        color="white"
-        text-color="primary"
-        class="bg-white"
-        @click.stop="$emit('exit')"
-      />
+      <div class="absolute-top-right q-ma-md">
+        <q-btn
+          round
+          icon="exit_to_app"
+          color="white"
+          text-color="primary"
+          class="bg-white"
+          @click.stop="$emit('exit')"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  name: 'RoomLayout',
   props: {
-    roomNumber: String,
-    roomStatus: Object,
-    headerColor: String,
-    statuses: Array,
-    menuVisible: Boolean
+    roomNumber: {
+      type: String,
+      required: true
+    },
+    roomStatus: {
+      type: Object,
+      default: () => ({})
+    },
+    headerColor: {
+      type: String,
+      default: '#A45C28'
+    },
+    logoUrl: {
+      type: String,
+      default: ''
+    },
+    menuVisible: {
+      type: Boolean,
+      default: false
+    },
+    statuses: {
+      type: Array,
+      default: () => []
+    }
+  },
+  computed: {
+    menuOpen: {
+      get() {
+        return this.menuVisible;
+      },
+      set() {
+        // we don't set it locally, just emit to parent
+        this.$emit('toggle-menu');
+      }
+    }
   }
 };
 </script>
 
-
 <style scoped>
-.header {
-  height: 150px; /* Increased height */
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-
 .mc-company-logo {
-  height: 100px; /* Increased logo size */
-  object-fit: contain;
+  max-height: 80px;
+  max-width: 200px;
 }
-
+.mc-room-number {
+  font-size: 2.5rem;
+}
 .mc-status-main {
-  margin-top: 40px;
-}
-
-.mc-room-status {
-  font-weight: bold;
-}
-
-.fullscreen {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
+  min-height: 60vh;
 }
 </style>
