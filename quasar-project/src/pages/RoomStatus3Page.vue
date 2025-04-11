@@ -2,7 +2,7 @@
   <RoomLayout
     :roomStatus="roomStatus"
     :headerColor="headerColor"
-    roomNumber="01"
+    roomNumber="03"
     :logoUrl="logoUrl"
     :menuVisible="menuVisible"
     :statuses="statuses"
